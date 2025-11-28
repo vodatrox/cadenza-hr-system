@@ -1,0 +1,17 @@
+Django
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+psycopg2-binary
+python-decouple
+Pillow
+celery
+redis
+django-celery-beat
+django-celery-results
+django-filter
+drf-yasg
+gunicorn
+python-social-auth[django]
+social-auth-app-django
+whitenoise
