@@ -2,7 +2,10 @@
 Admin configuration for payroll app.
 """
 from django.contrib import admin
-from .models import PayrollSettings, PayrollPeriod, Payroll, PayrollItem
+from .models import (
+    PayrollSettings, StatutoryEarning, StatutoryDeduction,
+    PayrollPeriod, Payroll, PayrollEarning, PayrollDeduction
+)
 
 
 @admin.register(PayrollSettings)
@@ -17,15 +20,35 @@ class PayrollSettingsAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
 
 
+@admin.register(StatutoryEarning)
+class StatutoryEarningAdmin(admin.ModelAdmin):
+    """Admin for StatutoryEarning model."""
+    list_display = ('name', 'client', 'is_percentage', 'amount', 'is_taxable', 'is_active')
+    list_filter = ('is_percentage', 'is_taxable', 'is_active', 'client')
+    search_fields = ('name', 'description', 'client__name')
+    ordering = ('client', 'name')
+    readonly_fields = ('created_at', 'updated_at')
+
+
+@admin.register(StatutoryDeduction)
+class StatutoryDeductionAdmin(admin.ModelAdmin):
+    """Admin for StatutoryDeduction model."""
+    list_display = ('name', 'client', 'is_percentage', 'amount', 'is_active')
+    list_filter = ('is_percentage', 'is_active', 'client')
+    search_fields = ('name', 'description', 'client__name')
+    ordering = ('client', 'name')
+    readonly_fields = ('created_at', 'updated_at')
+
+
 @admin.register(PayrollPeriod)
 class PayrollPeriodAdmin(admin.ModelAdmin):
     """Admin for PayrollPeriod model."""
     list_display = (
-        'client', 'period_type', 'start_date', 'end_date',
+        'title', 'client', 'period_type', 'start_date', 'end_date',
         'payment_date', 'status', 'created_at'
     )
     list_filter = ('status', 'period_type', 'client', 'start_date')
-    search_fields = ('client__name',)
+    search_fields = ('title', 'client__name')
     ordering = ('-start_date',)
     readonly_fields = ('created_at', 'updated_at')
 
@@ -67,11 +90,21 @@ class PayrollAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(PayrollItem)
-class PayrollItemAdmin(admin.ModelAdmin):
-    """Admin for PayrollItem model."""
-    list_display = ('name', 'payroll', 'item_type', 'amount', 'client')
-    list_filter = ('item_type', 'client', 'created_at')
+@admin.register(PayrollEarning)
+class PayrollEarningAdmin(admin.ModelAdmin):
+    """Admin for PayrollEarning model."""
+    list_display = ('name', 'payroll', 'amount', 'is_recurring', 'client')
+    list_filter = ('is_recurring', 'client', 'created_at')
+    search_fields = ('name', 'payroll__employee__first_name', 'payroll__employee__last_name')
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at', 'updated_at')
+
+
+@admin.register(PayrollDeduction)
+class PayrollDeductionAdmin(admin.ModelAdmin):
+    """Admin for PayrollDeduction model."""
+    list_display = ('name', 'payroll', 'amount', 'is_recurring', 'client')
+    list_filter = ('is_recurring', 'client', 'created_at')
     search_fields = ('name', 'payroll__employee__first_name', 'payroll__employee__last_name')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')

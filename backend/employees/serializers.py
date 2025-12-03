@@ -56,13 +56,14 @@ class EmployeeListSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source='get_full_name', read_only=True)
     department_name = serializers.CharField(source='department.name', read_only=True)
     photo_url = serializers.SerializerMethodField()
+    is_active = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Employee
         fields = (
             'id', 'employee_id', 'first_name', 'last_name', 'full_name',
             'email', 'phone', 'position', 'department_name', 'status',
-            'photo_url', 'date_hired', 'basic_salary'
+            'photo_url', 'date_hired', 'basic_salary', 'is_active'
         )
 
     def get_photo_url(self, obj):

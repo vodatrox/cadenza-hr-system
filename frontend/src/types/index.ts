@@ -139,14 +139,55 @@ export interface PayrollSettings {
   updated_at: string;
 }
 
+export interface StatutoryEarning {
+  id: number;
+  name: string;
+  description: string;
+  is_percentage: boolean;
+  amount: string;
+  is_taxable: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface StatutoryDeduction {
+  id: number;
+  name: string;
+  description: string;
+  is_percentage: boolean;
+  amount: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface PayrollPeriod {
   id: number;
+  title: string;
   period_type: 'MONTHLY' | 'WEEKLY' | 'BI_WEEKLY';
   start_date: string;
   end_date: string;
   payment_date: string;
-  status: 'DRAFT' | 'PROCESSING' | 'COMPLETED' | 'PAID';
+  status: 'DRAFT' | 'PROCESSING' | 'APPROVED' | 'PAID' | 'REVERSED';
   notes: string;
+  total_gross_pay: string;
+  total_net_pay: string;
+  total_deductions: string;
+  total_tax: string;
+  payroll_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PayrollBatch {
+  id: number;
+  batch_number: string;
+  title: string;
+  period: number;
+  period_name?: string;
+  status: 'DRAFT' | 'APPROVED' | 'PAID';
+  description: string;
   total_gross_pay: string;
   total_net_pay: string;
   total_deductions: string;
@@ -155,39 +196,58 @@ export interface PayrollPeriod {
   updated_at: string;
 }
 
+export interface PayrollEarning {
+  id: number;
+  payroll: number;
+  name: string;
+  amount: string;
+  description: string;
+  is_recurring: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PayrollDeduction {
+  id: number;
+  payroll: number;
+  name: string;
+  amount: string;
+  description: string;
+  is_recurring: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Payroll {
   id: number;
   employee: number;
   employee_name: string;
-  employee_id: string;
+  employee_id_number: string;
   period: number;
   period_name?: string;
   period_details?: PayrollPeriod;
+  batch?: number | null;
+  batch_number?: string;
+  batch_details?: PayrollBatch;
   status: 'PENDING' | 'APPROVED' | 'PAID' | 'CANCELLED';
   basic_salary: string;
   total_allowances: string;
+  total_statutory_earnings: string;
+  total_additional_earnings: string;
   gross_pay: string;
   pension: string;
   nhf: string;
   tax: string;
+  total_statutory_deductions: string;
   other_deductions: string;
+  total_additional_deductions: string;
   total_deductions: string;
   net_pay: string;
   payment_date: string | null;
   payment_reference: string;
   notes: string;
-  items?: PayrollItem[];
-  created_at: string;
-  updated_at: string;
-}
-
-export interface PayrollItem {
-  id: number;
-  payroll: number;
-  name: string;
-  item_type: 'ALLOWANCE' | 'DEDUCTION';
-  amount: string;
-  description: string;
+  earnings?: PayrollEarning[];
+  deductions?: PayrollDeduction[];
   created_at: string;
   updated_at: string;
 }

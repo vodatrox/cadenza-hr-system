@@ -7,14 +7,22 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Sum, Count
-from .models import PayrollSettings, PayrollPeriod, Payroll, PayrollItem
+from .models import (
+    PayrollSettings, StatutoryEarning, StatutoryDeduction,
+    PayrollPeriod, PayrollBatch, Payroll, PayrollEarning, PayrollDeduction
+)
 from .serializers import (
-    PayrollSettingsSerializer, PayrollPeriodSerializer, PayrollListSerializer,
-    PayrollDetailSerializer, PayrollCreateSerializer, PayrollItemSerializer,
-    BulkPayrollCreateSerializer
+    PayrollSettingsSerializer, StatutoryEarningSerializer, StatutoryDeductionSerializer,
+    PayrollPeriodSerializer, PayrollBatchSerializer, PayrollListSerializer, PayrollDetailSerializer,
+    PayrollCreateSerializer, BulkPayrollCreateSerializer,
+    PayrollEarningSerializer, PayrollDeductionSerializer
 )
 from employees.models import Employee
 
+
+# ============================================================================
+# PAYROLL SETTINGS VIEWS
+# ============================================================================
 
 class PayrollSettingsView(APIView):
     """View to get and update payroll settings."""
@@ -51,6 +59,108 @@ class PayrollSettingsView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+# ============================================================================
+# STATUTORY EARNINGS VIEWS
+# ============================================================================
+
+class StatutoryEarningListCreateView(generics.ListCreateAPIView):
+    """View to list and create statutory earnings."""
+    serializer_class = StatutoryEarningSerializer
+    permission_classes = (IsAuthenticated,)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ('name', 'description')
+    ordering = ('name',)
+
+    def get_queryset(self):
+        """Filter statutory earnings by client."""
+        queryset = StatutoryEarning.objects.all()
+        if hasattr(self.request, 'current_client') and self.request.current_client:
+            queryset = queryset.filter(client=self.request.current_client)
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        """Create statutory earning with client from request."""
+        if not hasattr(request, 'current_client') or not request.current_client:
+            return Response(
+                {'error': 'Client ID must be provided in X-Client-ID header'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        earning = serializer.save(client=request.current_client)
+        return Response(
+            StatutoryEarningSerializer(earning).data,
+            status=status.HTTP_201_CREATED
+        )
+
+
+class StatutoryEarningDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """View to retrieve, update and delete a statutory earning."""
+    serializer_class = StatutoryEarningSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """Filter statutory earnings by client."""
+        queryset = StatutoryEarning.objects.all()
+        if hasattr(self.request, 'current_client') and self.request.current_client:
+            queryset = queryset.filter(client=self.request.current_client)
+        return queryset
+
+
+# ============================================================================
+# STATUTORY DEDUCTIONS VIEWS
+# ============================================================================
+
+class StatutoryDeductionListCreateView(generics.ListCreateAPIView):
+    """View to list and create statutory deductions."""
+    serializer_class = StatutoryDeductionSerializer
+    permission_classes = (IsAuthenticated,)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ('name', 'description')
+    ordering = ('name',)
+
+    def get_queryset(self):
+        """Filter statutory deductions by client."""
+        queryset = StatutoryDeduction.objects.all()
+        if hasattr(self.request, 'current_client') and self.request.current_client:
+            queryset = queryset.filter(client=self.request.current_client)
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        """Create statutory deduction with client from request."""
+        if not hasattr(request, 'current_client') or not request.current_client:
+            return Response(
+                {'error': 'Client ID must be provided in X-Client-ID header'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        deduction = serializer.save(client=request.current_client)
+        return Response(
+            StatutoryDeductionSerializer(deduction).data,
+            status=status.HTTP_201_CREATED
+        )
+
+
+class StatutoryDeductionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """View to retrieve, update and delete a statutory deduction."""
+    serializer_class = StatutoryDeductionSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """Filter statutory deductions by client."""
+        queryset = StatutoryDeduction.objects.all()
+        if hasattr(self.request, 'current_client') and self.request.current_client:
+            queryset = queryset.filter(client=self.request.current_client)
+        return queryset
+
+
+# ============================================================================
+# PAYROLL PERIOD VIEWS
+# ============================================================================
 
 class PayrollPeriodListCreateView(generics.ListCreateAPIView):
     """View to list and create payroll periods."""
@@ -97,6 +207,103 @@ class PayrollPeriodDetailView(generics.RetrieveUpdateDestroyAPIView):
         return queryset
 
 
+# ============================================================================
+# PAYROLL BATCH VIEWS
+# ============================================================================
+
+class PayrollBatchListCreateView(generics.ListCreateAPIView):
+    """View to list and create payroll batches."""
+    serializer_class = PayrollBatchSerializer
+    permission_classes = (IsAuthenticated,)
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter)
+    filterset_fields = ('period', 'status')
+    search_fields = ('batch_number', 'title', 'description')
+    ordering_fields = ('created_at', 'batch_number')
+    ordering = ('-created_at',)
+
+    def get_queryset(self):
+        """Filter payroll batches by client."""
+        queryset = PayrollBatch.objects.all()
+        if hasattr(self.request, 'current_client') and self.request.current_client:
+            queryset = queryset.filter(client=self.request.current_client)
+        return queryset
+
+    def perform_create(self, serializer):
+        """Set the client when creating a batch."""
+        if hasattr(self.request, 'current_client') and self.request.current_client:
+            serializer.save(client=self.request.current_client)
+        else:
+            serializer.save()
+
+
+class PayrollBatchDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """View to retrieve, update and delete a payroll batch."""
+    serializer_class = PayrollBatchSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """Filter payroll batches by client."""
+        queryset = PayrollBatch.objects.all()
+        if hasattr(self.request, 'current_client') and self.request.current_client:
+            queryset = queryset.filter(client=self.request.current_client)
+        return queryset
+
+
+class PayrollBatchActionsView(APIView):
+    """View to perform batch-level operations."""
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, pk):
+        """Perform batch action."""
+        if not hasattr(request, 'current_client') or not request.current_client:
+            return Response(
+                {'error': 'Client ID must be provided in X-Client-ID header'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            batch = PayrollBatch.objects.get(pk=pk, client=request.current_client)
+        except PayrollBatch.DoesNotExist:
+            return Response(
+                {'error': 'Batch not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        action = request.data.get('action')
+
+        if action == 'approve':
+            # Approve all payrolls in batch
+            batch.payrolls.update(status='APPROVED')
+            batch.status = 'APPROVED'
+            batch.save()
+            return Response({'message': 'Batch approved successfully'})
+
+        elif action == 'mark_paid':
+            # Mark all payrolls as paid
+            batch.payrolls.update(status='PAID')
+            batch.status = 'PAID'
+            batch.save()
+            return Response({'message': 'Batch marked as paid successfully'})
+
+        elif action == 'recalculate':
+            # Recalculate all payrolls in batch
+            settings, _ = PayrollSettings.objects.get_or_create(client=request.current_client)
+            for payroll in batch.payrolls.all():
+                payroll.calculate(settings)
+                payroll.save()
+            return Response({'message': 'Batch recalculated successfully'})
+
+        else:
+            return Response(
+                {'error': 'Invalid action. Valid actions: approve, mark_paid, recalculate'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+# ============================================================================
+# PAYROLL VIEWS
+# ============================================================================
+
 class PayrollListCreateView(generics.ListCreateAPIView):
     """View to list and create payrolls."""
     permission_classes = (IsAuthenticated,)
@@ -104,7 +311,7 @@ class PayrollListCreateView(generics.ListCreateAPIView):
     search_fields = ('employee__first_name', 'employee__last_name', 'employee__employee_id')
     ordering_fields = ('employee__first_name', 'net_pay', 'gross_pay')
     ordering = ('-period__start_date', 'employee__first_name')
-    filterset_fields = ('status', 'period')
+    filterset_fields = ('status', 'period', 'batch')
 
     def get_queryset(self):
         """Filter payrolls by client."""
@@ -140,7 +347,9 @@ class PayrollDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         """Filter payrolls by client."""
-        queryset = Payroll.objects.select_related('employee', 'period').prefetch_related('items')
+        queryset = Payroll.objects.select_related('employee', 'period').prefetch_related(
+            'earnings', 'deductions'
+        )
         if hasattr(self.request, 'current_client') and self.request.current_client:
             queryset = queryset.filter(client=self.request.current_client)
         return queryset
@@ -152,17 +361,14 @@ class PayrollDetailView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
 
-        # If certain fields change, recalculate
-        if any(field in request.data for field in ['basic_salary', 'total_allowances', 'other_deductions']):
+        # If status change, just update
+        if 'status' in request.data and len(request.data) == 1:
             instance = serializer.save()
-            try:
-                settings = PayrollSettings.objects.get(client=instance.client)
-            except PayrollSettings.DoesNotExist:
-                settings = PayrollSettings.objects.create(client=instance.client)
-            instance.calculate(settings)
-            instance.save()
         else:
+            # If other fields change, recalculate
             instance = serializer.save()
+            instance.calculate()
+            instance.save()
 
         return Response(PayrollDetailSerializer(instance).data)
 
@@ -187,10 +393,32 @@ class BulkPayrollCreateView(APIView):
         employee_ids = serializer.validated_data['employee_ids']
 
         # Get payroll settings
-        try:
-            settings = PayrollSettings.objects.get(client=request.current_client)
-        except PayrollSettings.DoesNotExist:
-            settings = PayrollSettings.objects.create(client=request.current_client)
+        settings, _ = PayrollSettings.objects.get_or_create(client=request.current_client)
+
+        # Create or get batch
+        batch_id = request.data.get('batch_id')
+        batch_title = request.data.get('batch_title')
+
+        if batch_id:
+            # Use existing batch
+            try:
+                batch = PayrollBatch.objects.get(id=batch_id, client=request.current_client)
+            except PayrollBatch.DoesNotExist:
+                return Response(
+                    {'error': 'Batch not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        else:
+            # Auto-create new batch
+            if not batch_title:
+                batch_title = f"{period.title} - Batch"
+
+            batch = PayrollBatch.objects.create(
+                title=batch_title,
+                period=period,
+                client=request.current_client,
+                status='DRAFT'
+            )
 
         # Create payrolls
         created_payrolls = []
@@ -200,11 +428,12 @@ class BulkPayrollCreateView(APIView):
             try:
                 employee = Employee.objects.get(id=employee_id, client=request.current_client)
 
-                # Check if payroll already exists
-                if Payroll.objects.filter(employee=employee, period=period).exists():
+                # Check if payroll already exists for this employee in this batch
+                if Payroll.objects.filter(employee=employee, batch=batch).exists():
                     errors.append({
                         'employee_id': employee_id,
-                        'error': 'Payroll already exists for this period'
+                        'employee_name': employee.get_full_name(),
+                        'error': 'Payroll already exists in this batch'
                     })
                     continue
 
@@ -212,6 +441,7 @@ class BulkPayrollCreateView(APIView):
                 payroll = Payroll(
                     employee=employee,
                     period=period,
+                    batch=batch,
                     client=request.current_client
                 )
                 payroll.calculate(settings)
@@ -227,6 +457,7 @@ class BulkPayrollCreateView(APIView):
         response_data = {
             'created': len(created_payrolls),
             'errors': errors,
+            'batch': PayrollBatchSerializer(batch).data,
             'payrolls': PayrollListSerializer(created_payrolls, many=True).data
         }
 
@@ -274,14 +505,18 @@ class PayrollStatsView(APIView):
         return Response(stats)
 
 
-class PayrollItemListCreateView(generics.ListCreateAPIView):
-    """View to list and create payroll items."""
-    serializer_class = PayrollItemSerializer
+# ============================================================================
+# PAYROLL EARNINGS & DEDUCTIONS VIEWS
+# ============================================================================
+
+class PayrollEarningListCreateView(generics.ListCreateAPIView):
+    """View to list and create payroll earnings."""
+    serializer_class = PayrollEarningSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        """Filter payroll items by client and optionally by payroll."""
-        queryset = PayrollItem.objects.select_related('payroll')
+        """Filter payroll earnings by client and optionally by payroll."""
+        queryset = PayrollEarning.objects.select_related('payroll')
         if hasattr(self.request, 'current_client') and self.request.current_client:
             queryset = queryset.filter(client=self.request.current_client)
 
@@ -292,7 +527,7 @@ class PayrollItemListCreateView(generics.ListCreateAPIView):
         return queryset
 
     def create(self, request, *args, **kwargs):
-        """Create payroll item with client from request."""
+        """Create payroll earning and recalculate payroll."""
         if not hasattr(request, 'current_client') or not request.current_client:
             return Response(
                 {'error': 'Client ID must be provided in X-Client-ID header'},
@@ -301,21 +536,104 @@ class PayrollItemListCreateView(generics.ListCreateAPIView):
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        item = serializer.save(client=request.current_client)
+        earning = serializer.save(client=request.current_client)
+
+        # Recalculate payroll
+        earning.payroll.calculate()
+        earning.payroll.save()
+
         return Response(
-            PayrollItemSerializer(item).data,
+            PayrollEarningSerializer(earning).data,
             status=status.HTTP_201_CREATED
         )
 
 
-class PayrollItemDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """View to retrieve, update and delete a payroll item."""
-    serializer_class = PayrollItemSerializer
+class PayrollEarningDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """View to retrieve, update and delete a payroll earning."""
+    serializer_class = PayrollEarningSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        """Filter payroll items by client."""
-        queryset = PayrollItem.objects.all()
+        """Filter payroll earnings by client."""
+        queryset = PayrollEarning.objects.all()
         if hasattr(self.request, 'current_client') and self.request.current_client:
             queryset = queryset.filter(client=self.request.current_client)
         return queryset
+
+    def perform_update(self, serializer):
+        """Update and recalculate payroll."""
+        earning = serializer.save()
+        earning.payroll.calculate()
+        earning.payroll.save()
+
+    def perform_destroy(self, instance):
+        """Delete and recalculate payroll."""
+        payroll = instance.payroll
+        instance.delete()
+        payroll.calculate()
+        payroll.save()
+
+
+class PayrollDeductionListCreateView(generics.ListCreateAPIView):
+    """View to list and create payroll deductions."""
+    serializer_class = PayrollDeductionSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """Filter payroll deductions by client and optionally by payroll."""
+        queryset = PayrollDeduction.objects.select_related('payroll')
+        if hasattr(self.request, 'current_client') and self.request.current_client:
+            queryset = queryset.filter(client=self.request.current_client)
+
+        payroll_id = self.request.query_params.get('payroll')
+        if payroll_id:
+            queryset = queryset.filter(payroll_id=payroll_id)
+
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        """Create payroll deduction and recalculate payroll."""
+        if not hasattr(request, 'current_client') or not request.current_client:
+            return Response(
+                {'error': 'Client ID must be provided in X-Client-ID header'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        deduction = serializer.save(client=request.current_client)
+
+        # Recalculate payroll
+        deduction.payroll.calculate()
+        deduction.payroll.save()
+
+        return Response(
+            PayrollDeductionSerializer(deduction).data,
+            status=status.HTTP_201_CREATED
+        )
+
+
+class PayrollDeductionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """View to retrieve, update and delete a payroll deduction."""
+    serializer_class = PayrollDeductionSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """Filter payroll deductions by client."""
+        queryset = PayrollDeduction.objects.all()
+        if hasattr(self.request, 'current_client') and self.request.current_client:
+            queryset = queryset.filter(client=self.request.current_client)
+        return queryset
+
+    def perform_update(self, serializer):
+        """Update and recalculate payroll."""
+        deduction = serializer.save()
+        deduction.payroll.calculate()
+        deduction.payroll.save()
+
+    def perform_destroy(self, instance):
+        """Delete and recalculate payroll."""
+        payroll = instance.payroll
+        instance.delete()
+        payroll.calculate()
+        payroll.save()
