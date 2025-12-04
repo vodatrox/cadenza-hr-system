@@ -15,3 +15,6 @@ gunicorn
 python-social-auth[django]
 social-auth-app-django
 whitenoise
+openpyxl
+reportlab
+weasyprint

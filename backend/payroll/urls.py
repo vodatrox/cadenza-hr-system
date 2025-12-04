@@ -23,6 +23,10 @@ from .views import (
     # Payroll Earnings & Deductions
     PayrollEarningListCreateView, PayrollEarningDetailView,
     PayrollDeductionListCreateView, PayrollDeductionDetailView,
+
+    # Exports
+    PayrollBatchExportExcelView, PayrollBatchExportPDFView,
+    PayslipPDFExportView,
 )
 
 app_name = 'payroll'
@@ -59,4 +63,9 @@ urlpatterns = [
     path('earnings/<int:pk>/', PayrollEarningDetailView.as_view(), name='payroll_earning_detail'),
     path('deductions/', PayrollDeductionListCreateView.as_view(), name='payroll_deduction_list_create'),
     path('deductions/<int:pk>/', PayrollDeductionDetailView.as_view(), name='payroll_deduction_detail'),
+
+    # ========== EXPORTS ==========
+    path('batches/<int:pk>/export/excel/', PayrollBatchExportExcelView.as_view(), name='batch_export_excel'),
+    path('batches/<int:pk>/export/pdf/', PayrollBatchExportPDFView.as_view(), name='batch_export_pdf'),
+    path('<int:pk>/payslip/export/', PayslipPDFExportView.as_view(), name='payslip_export_pdf'),
 ]

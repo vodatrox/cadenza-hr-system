@@ -65,6 +65,27 @@ function BatchDetailContent() {
     }
   };
 
+  const handleExport = async (format: 'excel' | 'pdf') => {
+    try {
+      const response = await api.get(`/payroll/batches/${batchId}/export/${format}/`, {
+        responseType: 'blob'
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Payroll_Batch_${batch?.batch_number}.${format === 'excel' ? 'xlsx' : 'pdf'}`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      toast.success(`Batch exported to ${format.toUpperCase()} successfully`);
+    } catch (error: any) {
+      toast.error(`Failed to export batch to ${format.toUpperCase()}`);
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     const colors: Record<string, string> = {
       DRAFT: 'bg-gray-100 text-gray-800',
@@ -173,11 +194,19 @@ function BatchDetailContent() {
             </button>
 
             <button
-              onClick={() => toast.info('Export feature coming soon')}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              onClick={() => handleExport('excel')}
+              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
             >
               <FiDownload className="mr-2" />
-              Export to CSV
+              Export to Excel
+            </button>
+
+            <button
+              onClick={() => handleExport('pdf')}
+              className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            >
+              <FiDownload className="mr-2" />
+              Export to PDF
             </button>
           </div>
 

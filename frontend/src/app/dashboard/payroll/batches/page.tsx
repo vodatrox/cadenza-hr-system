@@ -7,7 +7,7 @@ import DashboardLayout from '@/components/DashboardLayout';
 import api from '@/lib/api';
 import { toast } from 'react-toastify';
 import {
-  FiPlus, FiEye, FiEdit2, FiTrash2, FiFilter, FiSearch, FiCheck, FiDollarSign, FiRefreshCw
+  FiPlus, FiEye, FiEdit2, FiTrash2, FiFilter, FiSearch, FiCheck, FiDollarSign, FiRefreshCw, FiCalendar
 } from 'react-icons/fi';
 import type { PayrollBatch, PayrollPeriod } from '@/types';
 
@@ -126,13 +126,22 @@ function BatchListContent() {
             <h1 className="text-2xl font-bold text-gray-900">Payroll Batches</h1>
             <p className="text-gray-600 mt-1">Manage payroll batches and process payments</p>
           </div>
-          <button
-            onClick={() => router.push('/dashboard/payroll/create')}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            <FiPlus className="mr-2" />
-            Create Payroll
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => router.push('/dashboard/payroll/periods')}
+              className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+            >
+              <FiCalendar className="mr-2" />
+              Manage Periods
+            </button>
+            <button
+              onClick={() => router.push('/dashboard/payroll/create')}
+              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              <FiPlus className="mr-2" />
+              Create Payroll
+            </button>
+          </div>
         </div>
 
         {/* Filters */}

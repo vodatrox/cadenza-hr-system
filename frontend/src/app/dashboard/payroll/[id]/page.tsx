@@ -153,6 +153,30 @@ export default function PayrollDetailPage() {
               <FiDownload className="text-base" />
               View Payslip
             </button>
+            <button
+              onClick={async () => {
+                try {
+                  const response = await api.get(`/payroll/${payrollId}/payslip/export/`, {
+                    responseType: 'blob'
+                  });
+                  const url = window.URL.createObjectURL(new Blob([response.data]));
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.setAttribute('download', `Payslip_${payroll.employee_id_number}_${payroll.period_name?.replace(' ', '_')}.pdf`);
+                  document.body.appendChild(link);
+                  link.click();
+                  link.remove();
+                  window.URL.revokeObjectURL(url);
+                  toast.success('Payslip downloaded successfully');
+                } catch (error) {
+                  toast.error('Failed to download payslip');
+                }
+              }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
+            >
+              <FiDownload className="text-base" />
+              Download PDF
+            </button>
           </div>
         </div>
 
@@ -454,13 +478,33 @@ export default function PayrollDetailPage() {
         </div>
 
         {/* Net Pay */}
-        <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-lg p-8 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-lg mb-1 text-green-100">Net Pay</p>
-              <p className="text-4xl font-bold">₦{parseFloat(payroll.net_pay).toLocaleString()}</p>
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 px-8 py-4 border-b border-emerald-100">
+            <p className="text-sm font-semibold text-emerald-900 uppercase tracking-wide">Take Home Pay</p>
+          </div>
+          <div className="p-8">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <div className="flex items-baseline gap-3">
+                  <span className="text-5xl font-bold text-gray-900 tracking-tight">
+                    ₦{parseFloat(payroll.net_pay).toLocaleString()}
+                  </span>
+                  <span className="text-lg text-gray-500 font-medium">.00</span>
+                </div>
+                <p className="text-sm text-gray-500 mt-3 flex items-center gap-2">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">
+                    ✓ Calculated
+                  </span>
+                  <span>Net amount after all deductions</span>
+                </p>
+              </div>
+              <div className="hidden md:flex items-center justify-center w-32 h-32 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/20">
+                <div className="text-center text-white">
+                  <div className="text-3xl font-bold">₦</div>
+                  <div className="text-xs font-medium mt-1 opacity-90">NGN</div>
+                </div>
+              </div>
             </div>
-            <FiDollarSign className="text-6xl text-green-300" />
           </div>
         </div>
 

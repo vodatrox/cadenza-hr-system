@@ -637,3 +637,91 @@ class PayrollDeductionDetailView(generics.RetrieveUpdateDestroyAPIView):
         instance.delete()
         payroll.calculate()
         payroll.save()
+
+
+# ============================================================================
+# EXPORT VIEWS
+# ============================================================================
+
+class PayrollBatchExportExcelView(APIView):
+    """Export payroll batch to Excel."""
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk):
+        """Generate and download Excel export."""
+        from django.http import HttpResponse
+        from .exports import PayrollBatchExcelExport
+
+        try:
+            batch = PayrollBatch.objects.get(pk=pk, client=request.current_client)
+        except PayrollBatch.DoesNotExist:
+            return Response(
+                {'error': 'Payroll batch not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        exporter = PayrollBatchExcelExport(batch)
+        excel_file = exporter.generate()
+
+        response = HttpResponse(
+            excel_file.read(),
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = f'attachment; filename="Payroll_Batch_{batch.batch_number}.xlsx"'
+
+        return response
+
+
+class PayrollBatchExportPDFView(APIView):
+    """Export payroll batch to PDF."""
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk):
+        """Generate and download PDF export."""
+        from django.http import HttpResponse
+        from .exports import PayrollBatchPDFExport
+
+        try:
+            batch = PayrollBatch.objects.get(pk=pk, client=request.current_client)
+        except PayrollBatch.DoesNotExist:
+            return Response(
+                {'error': 'Payroll batch not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        exporter = PayrollBatchPDFExport(batch)
+        pdf_file = exporter.generate()
+
+        response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="Payroll_Batch_{batch.batch_number}.pdf"'
+
+        return response
+
+
+class PayslipPDFExportView(APIView):
+    """Export individual payslip to PDF."""
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk):
+        """Generate and download payslip PDF."""
+        from django.http import HttpResponse
+        from .exports import PayslipPDFExport
+
+        try:
+            payroll = Payroll.objects.select_related('employee', 'period', 'client').prefetch_related(
+                'earnings', 'deductions'
+            ).get(pk=pk, client=request.current_client)
+        except Payroll.DoesNotExist:
+            return Response(
+                {'error': 'Payroll not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        exporter = PayslipPDFExport(payroll)
+        pdf_file = exporter.generate()
+
+        response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+        filename = f"Payslip_{payroll.employee.employee_id}_{payroll.period.title.replace(' ', '_')}.pdf"
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+        return response

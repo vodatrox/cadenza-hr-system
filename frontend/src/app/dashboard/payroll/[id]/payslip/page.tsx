@@ -285,15 +285,23 @@ export default function PayslipPage() {
           </div>
 
           {/* Net Pay */}
-          <div className="bg-gradient-to-r from-green-600 to-green-700 p-8">
-            <div className="flex items-center justify-between text-white">
-              <div>
-                <p className="text-green-100 text-lg mb-1">NET PAY</p>
-                <p className="text-5xl font-bold">₦{parseFloat(payroll.net_pay).toLocaleString()}</p>
+          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-t-2 border-emerald-200 p-8 print:border-t print:border-gray-300 print:bg-white">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-emerald-900 uppercase tracking-wide mb-3 print:text-gray-700">Take Home Pay</p>
+                <div className="flex items-baseline gap-3">
+                  <span className="text-5xl font-bold text-gray-900 tracking-tight">
+                    ₦{parseFloat(payroll.net_pay).toLocaleString()}
+                  </span>
+                  <span className="text-lg text-gray-500 font-medium">.00</span>
+                </div>
+                <p className="text-sm text-gray-600 mt-3">Net amount after all deductions</p>
               </div>
-              <div className="text-right">
-                <p className="text-green-100 text-sm">This is your take-home pay</p>
-                <p className="text-green-100 text-sm">after all deductions</p>
+              <div className="hidden md:flex print:hidden items-center justify-center w-28 h-28 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/20">
+                <div className="text-center text-white">
+                  <div className="text-3xl font-bold">₦</div>
+                  <div className="text-xs font-medium mt-1 opacity-90">NGN</div>
+                </div>
               </div>
             </div>
           </div>
