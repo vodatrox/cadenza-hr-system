@@ -129,21 +129,58 @@ class PayrollDetailSerializer(serializers.ModelSerializer):
     employee_name = serializers.CharField(source='employee.get_full_name', read_only=True)
     employee_id_number = serializers.CharField(source='employee.employee_id', read_only=True)
     period_details = PayrollPeriodSerializer(source='period', read_only=True)
+    period_name = serializers.CharField(source='period.title', read_only=True)
     batch_details = PayrollBatchSerializer(source='batch', read_only=True)
     earnings = PayrollEarningSerializer(many=True, read_only=True)
     deductions = PayrollDeductionSerializer(many=True, read_only=True)
+    statutory_earnings_breakdown = serializers.SerializerMethodField()
+    statutory_deductions_breakdown = serializers.SerializerMethodField()
 
     class Meta:
         model = Payroll
         fields = (
-            'id', 'employee', 'employee_name', 'employee_id_number', 'period', 'period_details',
-            'batch', 'batch_details', 'status', 'basic_salary', 'total_allowances',
-            'total_statutory_earnings', 'total_additional_earnings', 'gross_pay', 'pension',
-            'nhf', 'tax', 'total_statutory_deductions', 'other_deductions',
-            'total_additional_deductions', 'total_deductions', 'net_pay', 'payment_date',
-            'payment_reference', 'notes', 'earnings', 'deductions', 'created_at', 'updated_at'
+            'id', 'employee', 'employee_name', 'employee_id_number', 'period', 'period_name',
+            'period_details', 'batch', 'batch_details', 'status', 'basic_salary', 'total_allowances',
+            'total_statutory_earnings', 'statutory_earnings_breakdown', 'total_additional_earnings',
+            'gross_pay', 'pension', 'nhf', 'tax', 'total_statutory_deductions',
+            'statutory_deductions_breakdown', 'other_deductions', 'total_additional_deductions',
+            'total_deductions', 'net_pay', 'payment_date', 'payment_reference', 'notes',
+            'earnings', 'deductions', 'created_at', 'updated_at'
         )
         read_only_fields = ('id', 'created_at', 'updated_at')
+
+    def get_statutory_earnings_breakdown(self, obj):
+        """Get individual statutory earnings with calculated amounts."""
+        statutory_earnings = StatutoryEarning.objects.filter(client=obj.client, is_active=True)
+        breakdown = []
+        for earning in statutory_earnings:
+            calculated_amount = earning.calculate_amount(obj.basic_salary)
+            breakdown.append({
+                'id': earning.id,
+                'name': earning.name,
+                'description': earning.description,
+                'is_percentage': earning.is_percentage,
+                'rate': str(earning.amount),
+                'amount': str(calculated_amount),
+                'is_taxable': earning.is_taxable
+            })
+        return breakdown
+
+    def get_statutory_deductions_breakdown(self, obj):
+        """Get individual statutory deductions with calculated amounts."""
+        statutory_deductions = StatutoryDeduction.objects.filter(client=obj.client, is_active=True)
+        breakdown = []
+        for deduction in statutory_deductions:
+            calculated_amount = deduction.calculate_amount(obj.basic_salary)
+            breakdown.append({
+                'id': deduction.id,
+                'name': deduction.name,
+                'description': deduction.description,
+                'is_percentage': deduction.is_percentage,
+                'rate': str(deduction.amount),
+                'amount': str(calculated_amount)
+            })
+        return breakdown
 
 
 class PayrollCreateSerializer(serializers.ModelSerializer):

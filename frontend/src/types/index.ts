@@ -218,6 +218,16 @@ export interface PayrollDeduction {
   updated_at: string;
 }
 
+export interface StatutoryItemBreakdown {
+  id: number;
+  name: string;
+  description: string;
+  is_percentage: boolean;
+  rate: string;
+  amount: string;
+  is_taxable?: boolean;
+}
+
 export interface Payroll {
   id: number;
   employee: number;
@@ -233,12 +243,14 @@ export interface Payroll {
   basic_salary: string;
   total_allowances: string;
   total_statutory_earnings: string;
+  statutory_earnings_breakdown?: StatutoryItemBreakdown[];
   total_additional_earnings: string;
   gross_pay: string;
   pension: string;
   nhf: string;
   tax: string;
   total_statutory_deductions: string;
+  statutory_deductions_breakdown?: StatutoryItemBreakdown[];
   other_deductions: string;
   total_additional_deductions: string;
   total_deductions: string;

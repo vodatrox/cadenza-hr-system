@@ -177,7 +177,16 @@ export default function PayslipPage() {
                     </div>
                   )}
 
-                  {parseFloat(payroll.total_statutory_earnings) > 0 && (
+                  {payroll.statutory_earnings_breakdown && payroll.statutory_earnings_breakdown.length > 0 ? (
+                    payroll.statutory_earnings_breakdown.map((earning) => (
+                      <div key={earning.id} className="flex justify-between">
+                        <span className="text-gray-700">{earning.name}</span>
+                        <span className="font-medium text-gray-900">
+                          ₦{parseFloat(earning.amount).toLocaleString()}
+                        </span>
+                      </div>
+                    ))
+                  ) : parseFloat(payroll.total_statutory_earnings) > 0 && (
                     <div className="flex justify-between">
                       <span className="text-gray-700">Statutory Earnings</span>
                       <span className="font-medium text-gray-900">
@@ -237,7 +246,16 @@ export default function PayslipPage() {
                     </div>
                   )}
 
-                  {parseFloat(payroll.total_statutory_deductions) > 0 && (
+                  {payroll.statutory_deductions_breakdown && payroll.statutory_deductions_breakdown.length > 0 ? (
+                    payroll.statutory_deductions_breakdown.map((deduction) => (
+                      <div key={deduction.id} className="flex justify-between">
+                        <span className="text-gray-700">{deduction.name}</span>
+                        <span className="font-medium text-gray-900">
+                          ₦{parseFloat(deduction.amount).toLocaleString()}
+                        </span>
+                      </div>
+                    ))
+                  ) : parseFloat(payroll.total_statutory_deductions) > 0 && (
                     <div className="flex justify-between">
                       <span className="text-gray-700">Other Statutory</span>
                       <span className="font-medium text-gray-900">

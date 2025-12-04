@@ -237,7 +237,30 @@ export default function PayrollDetailPage() {
             )}
 
             {/* Statutory Earnings */}
-            {parseFloat(payroll.total_statutory_earnings) > 0 && (
+            {payroll.statutory_earnings_breakdown && payroll.statutory_earnings_breakdown.length > 0 ? (
+              <>
+                {payroll.statutory_earnings_breakdown.map((earning) => (
+                  <div key={earning.id} className="flex items-center justify-between pb-3 border-b border-gray-100">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium text-gray-900">{earning.name}</p>
+                        {earning.is_taxable && (
+                          <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full">
+                            Taxable
+                          </span>
+                        )}
+                      </div>
+                      {earning.description && (
+                        <p className="text-sm text-gray-500">{earning.description}</p>
+                      )}
+                    </div>
+                    <p className="text-lg font-semibold text-gray-900">
+                      ₦{parseFloat(earning.amount).toLocaleString()}
+                    </p>
+                  </div>
+                ))}
+              </>
+            ) : parseFloat(payroll.total_statutory_earnings) > 0 && (
               <div className="flex items-center justify-between pb-3 border-b border-gray-100">
                 <div>
                   <p className="font-medium text-gray-900">Statutory Earnings</p>
@@ -356,7 +379,23 @@ export default function PayrollDetailPage() {
             )}
 
             {/* Other Statutory Deductions */}
-            {parseFloat(payroll.total_statutory_deductions) > 0 && (
+            {payroll.statutory_deductions_breakdown && payroll.statutory_deductions_breakdown.length > 0 ? (
+              <>
+                {payroll.statutory_deductions_breakdown.map((deduction) => (
+                  <div key={deduction.id} className="flex items-center justify-between pb-3 border-b border-gray-100">
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-900">{deduction.name}</p>
+                      {deduction.description && (
+                        <p className="text-sm text-gray-500">{deduction.description}</p>
+                      )}
+                    </div>
+                    <p className="text-lg font-semibold text-red-600">
+                      ₦{parseFloat(deduction.amount).toLocaleString()}
+                    </p>
+                  </div>
+                ))}
+              </>
+            ) : parseFloat(payroll.total_statutory_deductions) > 0 && (
               <div className="flex items-center justify-between pb-3 border-b border-gray-100">
                 <div>
                   <p className="font-medium text-gray-900">Other Statutory Deductions</p>
