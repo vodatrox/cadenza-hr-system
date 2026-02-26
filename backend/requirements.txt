@@ -18,3 +18,4 @@ whitenoise
 openpyxl
 reportlab
 weasyprint
+dj-database-url

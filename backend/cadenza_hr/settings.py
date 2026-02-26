@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 from datetime import timedelta
 from decouple import config
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,14 +82,16 @@ WSGI_APPLICATION = 'cadenza_hr.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default='cadenza_hr'),
-        'USER': config('DB_USER', default='postgres'),
-        'PASSWORD': config('DB_PASSWORD', default='postgres'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
-    }
+    'default': dj_database_url.config(
+        default='postgres://{}:{}@{}:{}/{}'.format(
+            config('DB_USER', default='postgres'),
+            config('DB_PASSWORD', default='postgres'),
+            config('DB_HOST', default='localhost'),
+            config('DB_PORT', default='5432'),
+            config('DB_NAME', default='cadenza_hr'),
+        ),
+        conn_max_age=600,
+    )
 }
 
 # Password validation

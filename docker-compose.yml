@@ -1,5 +1,4 @@
 services:
-  # PostgreSQL Database
   db:
     image: postgres:15-alpine
     container_name: cadenza_hr_db
@@ -16,10 +15,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - cadenza_network
 
-  # Redis
   redis:
     image: redis:7-alpine
     container_name: cadenza_hr_redis
@@ -30,18 +26,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - cadenza_network
 
-  # Django Backend
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: cadenza_hr_backend
     command: >
-      sh -c "python manage.py makemigrations --noinput &&
-             python manage.py migrate &&
+      sh -c "python manage.py migrate --noinput &&
              python manage.py collectstatic --noinput &&
              gunicorn cadenza_hr.wsgi:application --bind 0.0.0.0:8000 --workers 3"
     volumes:
@@ -67,10 +59,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    networks:
-      - cadenza_network
 
-  # Celery Worker
   celery_worker:
     build:
       context: ./backend
@@ -94,10 +83,7 @@ services:
       - db
       - redis
       - backend
-    networks:
-      - cadenza_network
 
-  # Celery Beat
   celery_beat:
     build:
       context: ./backend
@@ -121,15 +107,18 @@ services:
       - db
       - redis
       - backend
-    networks:
-      - cadenza_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cadenza_hr_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
 
 volumes:
   postgres_data:
   static_volume:
   media_volume:
-
-networks:
-  cadenza_network:
-    name: cadenza_hr_network
-    driver: bridge
