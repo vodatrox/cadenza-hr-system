@@ -166,7 +166,7 @@ export default function NewEmployeePage() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-slate-50">
       {/* Sidebar */}
       <div className="w-64 bg-white shadow-lg flex flex-col fixed h-full">
         {/* User Info */}
@@ -178,8 +178,8 @@ export default function NewEmployeePage() {
               </span>
             </div>
             <div>
-              <h2 className="text-base font-bold text-gray-900">Admin Name</h2>
-              <p className="text-sm text-gray-500">HR Manager</p>
+              <h2 className="text-base font-bold text-slate-900">Admin Name</h2>
+              <p className="text-sm text-slate-500">HR Manager</p>
             </div>
           </div>
         </div>
@@ -188,26 +188,26 @@ export default function NewEmployeePage() {
         <nav className="flex-1 px-3 py-4">
           <button
             onClick={() => router.push('/dashboard')}
-            className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 w-full"
+            className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-100 w-full"
           >
             <FiGrid className="text-lg" />
             Dashboard
           </button>
           <button
             onClick={() => router.push('/dashboard/employees')}
-            className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg w-full mt-1"
+            className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-accent-600 bg-accent-50 rounded-lg w-full mt-1"
           >
             <FiUsers className="text-lg" />
             Employees
           </button>
           <button
             onClick={() => router.push('/dashboard/payroll')}
-            className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 w-full mt-1"
+            className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-100 w-full mt-1"
           >
             <FiDollarSign className="text-lg" />
             Payroll
           </button>
-          <button className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 w-full mt-1">
+          <button className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-100 w-full mt-1">
             <FiBarChart className="text-lg" />
             Reports
           </button>
@@ -215,7 +215,7 @@ export default function NewEmployeePage() {
 
         {/* Onboard Button */}
         <div className="px-3 mb-4">
-          <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          <button className="w-full bg-accent-600 text-white py-3 rounded-lg font-medium hover:bg-accent-700 transition-colors">
             Onboard New Employee
           </button>
         </div>
@@ -224,12 +224,12 @@ export default function NewEmployeePage() {
         <div className="p-4 border-t">
           <button
             onClick={() => router.push('/dashboard/settings')}
-            className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 w-full"
+            className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 w-full"
           >
             <FiSettings className="text-lg" />
             Settings
           </button>
-          <button className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 w-full mt-2">
+          <button className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 w-full mt-2">
             <FiHelpCircle className="text-lg" />
             Help
           </button>
@@ -241,8 +241,8 @@ export default function NewEmployeePage() {
         <div className="p-8 max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">New Employee Onboarding</h1>
-            <p className="text-gray-500">Complete the steps to add a new employee to the system.</p>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">New Employee Onboarding</h1>
+            <p className="text-slate-500">Complete the steps to add a new employee to the system.</p>
           </div>
 
           {/* Progress Steps */}
@@ -254,20 +254,20 @@ export default function NewEmployeePage() {
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
                         currentStep > step.number
-                          ? 'bg-green-500 text-white'
+                          ? 'bg-emerald-500 text-white'
                           : currentStep === step.number
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-200 text-gray-500'
+                          ? 'bg-accent-600 text-white'
+                          : 'bg-slate-200 text-slate-500'
                       }`}
                     >
                       {currentStep > step.number ? <FiCheck /> : step.number}
                     </div>
-                    <p className={`mt-2 text-xs font-medium ${currentStep === step.number ? 'text-blue-600' : 'text-gray-500'}`}>
+                    <p className={`mt-2 text-xs font-medium ${currentStep === step.number ? 'text-accent-600' : 'text-slate-500'}`}>
                       {step.title}
                     </p>
                   </div>
                   {index < steps.length - 1 && (
-                    <div className={`flex-1 h-1 mx-2 ${currentStep > step.number ? 'bg-green-500' : 'bg-gray-200'}`} />
+                    <div className={`flex-1 h-1 mx-2 ${currentStep > step.number ? 'bg-emerald-500' : 'bg-slate-200'}`} />
                   )}
                 </div>
               ))}
@@ -275,16 +275,16 @@ export default function NewEmployeePage() {
           </div>
 
           {/* Form Content */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
             {/* Step 1: Personal Details */}
             {currentStep === 1 && (
               <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-6">Personal Information</h2>
+                <h2 className="text-xl font-bold text-slate-900 mb-6">Personal Information</h2>
 
                 {/* Photo Upload */}
                 <div className="mb-6 flex justify-center">
                   <div className="relative">
-                    <div className="w-32 h-32 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
+                    <div className="w-32 h-32 rounded-full bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center overflow-hidden">
                       {documents.photo ? (
                         <img
                           src={URL.createObjectURL(documents.photo)}
@@ -292,10 +292,10 @@ export default function NewEmployeePage() {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <FiUpload className="text-3xl text-gray-400" />
+                        <FiUpload className="text-3xl text-slate-400" />
                       )}
                     </div>
-                    <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition-colors shadow-lg">
+                    <label className="absolute bottom-0 right-0 bg-accent-600 text-white p-2 rounded-full cursor-pointer hover:bg-accent-700 transition-colors shadow-lg">
                       <FiUpload className="text-sm" />
                       <input
                         type="file"
@@ -309,7 +309,7 @@ export default function NewEmployeePage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       First Name *
                     </label>
                     <input
@@ -318,13 +318,13 @@ export default function NewEmployeePage() {
                       value={formData.first_name}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="Enter first name"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Last Name *
                     </label>
                     <input
@@ -333,13 +333,13 @@ export default function NewEmployeePage() {
                       value={formData.last_name}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="Enter last name"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Middle Name
                     </label>
                     <input
@@ -347,13 +347,13 @@ export default function NewEmployeePage() {
                       name="middle_name"
                       value={formData.middle_name}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="Enter middle name"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Email Address *
                     </label>
                     <input
@@ -362,13 +362,13 @@ export default function NewEmployeePage() {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="email@example.com"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Phone Number *
                     </label>
                     <input
@@ -377,13 +377,13 @@ export default function NewEmployeePage() {
                       value={formData.phone}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="+234 xxx xxx xxxx"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Date of Birth *
                     </label>
                     <input
@@ -392,12 +392,12 @@ export default function NewEmployeePage() {
                       value={formData.date_of_birth}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Gender *
                     </label>
                     <select
@@ -405,7 +405,7 @@ export default function NewEmployeePage() {
                       value={formData.gender}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                     >
                       <option value="MALE">Male</option>
                       <option value="FEMALE">Female</option>
@@ -414,7 +414,7 @@ export default function NewEmployeePage() {
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Address *
                     </label>
                     <textarea
@@ -423,13 +423,13 @@ export default function NewEmployeePage() {
                       onChange={handleInputChange}
                       required
                       rows={3}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="Enter full address"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       City *
                     </label>
                     <input
@@ -438,13 +438,13 @@ export default function NewEmployeePage() {
                       value={formData.city}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="City"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       State *
                     </label>
                     <input
@@ -453,7 +453,7 @@ export default function NewEmployeePage() {
                       value={formData.state}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="State"
                     />
                   </div>
@@ -464,10 +464,10 @@ export default function NewEmployeePage() {
             {/* Step 2: Job Details */}
             {currentStep === 2 && (
               <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-6">Job Details</h2>
+                <h2 className="text-xl font-bold text-slate-900 mb-6">Job Details</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Employee ID *
                     </label>
                     <input
@@ -476,14 +476,14 @@ export default function NewEmployeePage() {
                       value={formData.employee_id}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
+                      className="input-field bg-slate-50"
                       placeholder="Auto-generated"
                       readOnly
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Position *
                     </label>
                     <input
@@ -492,13 +492,13 @@ export default function NewEmployeePage() {
                       value={formData.position}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="e.g., Software Engineer"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Department *
                     </label>
                     <select
@@ -506,7 +506,7 @@ export default function NewEmployeePage() {
                       value={formData.department}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                     >
                       <option value="">Select Department</option>
                       {departments.map((dept) => (
@@ -518,7 +518,7 @@ export default function NewEmployeePage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Date Hired *
                     </label>
                     <input
@@ -527,12 +527,12 @@ export default function NewEmployeePage() {
                       value={formData.date_hired}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Employment Type *
                     </label>
                     <select
@@ -540,7 +540,7 @@ export default function NewEmployeePage() {
                       value={formData.employment_type}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                     >
                       <option value="FULL_TIME">Full Time</option>
                       <option value="PART_TIME">Part Time</option>
@@ -550,7 +550,7 @@ export default function NewEmployeePage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Initial Status *
                     </label>
                     <select
@@ -558,7 +558,7 @@ export default function NewEmployeePage() {
                       value={formData.status}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                     >
                       <option value="PROBATION">Probation</option>
                       <option value="ACTIVE">Active</option>
@@ -571,12 +571,12 @@ export default function NewEmployeePage() {
             {/* Step 3: Payment Information */}
             {currentStep === 3 && (
               <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-2">Payment Information</h2>
-                <p className="text-gray-500 mb-6">Details for salary disbursement.</p>
+                <h2 className="text-xl font-bold text-slate-900 mb-2">Payment Information</h2>
+                <p className="text-slate-500 mb-6">Details for salary disbursement.</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Basic Salary (₦) *
                     </label>
                     <input
@@ -585,13 +585,13 @@ export default function NewEmployeePage() {
                       value={formData.basic_salary}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="0.00"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Bank Name
                     </label>
                     <input
@@ -599,13 +599,13 @@ export default function NewEmployeePage() {
                       name="bank_name"
                       value={formData.bank_name}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="Enter bank name"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Account Holder Name
                     </label>
                     <input
@@ -613,13 +613,13 @@ export default function NewEmployeePage() {
                       name="account_name"
                       value={formData.account_name}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="As per bank records"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Account Number
                     </label>
                     <input
@@ -627,13 +627,13 @@ export default function NewEmployeePage() {
                       name="account_number"
                       value={formData.account_number}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="Enter account number"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       IFSC / Routing Code
                     </label>
                     <input
@@ -641,20 +641,20 @@ export default function NewEmployeePage() {
                       name="routing_code"
                       value={formData.routing_code}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="Enter code"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Account Type
                     </label>
                     <select
                       name="account_type"
                       value={formData.account_type}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                     >
                       <option value="SAVINGS">Savings</option>
                       <option value="CURRENT">Current</option>
@@ -667,10 +667,10 @@ export default function NewEmployeePage() {
             {/* Step 4: Emergency Contacts */}
             {currentStep === 4 && (
               <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-6">Emergency Contact Information</h2>
+                <h2 className="text-xl font-bold text-slate-900 mb-6">Emergency Contact Information</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Contact Name
                     </label>
                     <input
@@ -678,13 +678,13 @@ export default function NewEmployeePage() {
                       name="emergency_contact_name"
                       value={formData.emergency_contact_name}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="Full name"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Contact Phone
                     </label>
                     <input
@@ -692,13 +692,13 @@ export default function NewEmployeePage() {
                       name="emergency_contact_phone"
                       value={formData.emergency_contact_phone}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="+234 xxx xxx xxxx"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Relationship
                     </label>
                     <input
@@ -706,7 +706,7 @@ export default function NewEmployeePage() {
                       name="emergency_contact_relationship"
                       value={formData.emergency_contact_relationship}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="e.g., Spouse, Parent, Sibling"
                     />
                   </div>
@@ -717,11 +717,11 @@ export default function NewEmployeePage() {
             {/* Step 5: Tax & Documents */}
             {currentStep === 5 && (
               <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-6">Tax Information & Documents</h2>
+                <h2 className="text-xl font-bold text-slate-900 mb-6">Tax Information & Documents</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Tax ID Number
                     </label>
                     <input
@@ -729,13 +729,13 @@ export default function NewEmployeePage() {
                       name="tax_id"
                       value={formData.tax_id}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="Enter tax ID"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
                       Pension PIN
                     </label>
                     <input
@@ -743,23 +743,23 @@ export default function NewEmployeePage() {
                       name="pension_number"
                       value={formData.pension_number}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="input-field"
                       placeholder="Enter pension PIN"
                     />
                   </div>
                 </div>
 
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Document Uploads</h3>
-                <p className="text-gray-500 mb-6">Upload required documents for verification.</p>
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">Document Uploads</h3>
+                <p className="text-slate-500 mb-6">Upload required documents for verification.</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                  <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
                     <label className="cursor-pointer">
                       <div className="mb-3">
-                        <FiUpload className="mx-auto text-gray-400 text-3xl" />
+                        <FiUpload className="mx-auto text-slate-400 text-3xl" />
                       </div>
-                      <p className="text-sm font-medium text-gray-700 mb-1">Resume/CV</p>
-                      <p className="text-xs text-gray-500 mb-3">
+                      <p className="text-sm font-medium text-slate-700 mb-1">Resume/CV</p>
+                      <p className="text-xs text-slate-500 mb-3">
                         {documents.resume ? documents.resume.name : 'No file selected'}
                       </p>
                       <input
@@ -768,19 +768,19 @@ export default function NewEmployeePage() {
                         onChange={(e) => handleFileChange(e, 'resume')}
                         className="hidden"
                       />
-                      <span className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                      <span className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">
                         <FiUpload /> Upload
                       </span>
                     </label>
                   </div>
 
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                  <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
                     <label className="cursor-pointer">
                       <div className="mb-3">
-                        <FiUpload className="mx-auto text-gray-400 text-3xl" />
+                        <FiUpload className="mx-auto text-slate-400 text-3xl" />
                       </div>
-                      <p className="text-sm font-medium text-gray-700 mb-1">Contract</p>
-                      <p className="text-xs text-gray-500 mb-3">
+                      <p className="text-sm font-medium text-slate-700 mb-1">Contract</p>
+                      <p className="text-xs text-slate-500 mb-3">
                         {documents.contract ? documents.contract.name : 'No file selected'}
                       </p>
                       <input
@@ -789,7 +789,7 @@ export default function NewEmployeePage() {
                         onChange={(e) => handleFileChange(e, 'contract')}
                         className="hidden"
                       />
-                      <span className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                      <span className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">
                         <FiUpload /> Upload
                       </span>
                     </label>
@@ -803,7 +803,7 @@ export default function NewEmployeePage() {
           <div className="flex justify-between items-center mt-8">
             <button
               onClick={handleSaveDraft}
-              className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+              className="px-6 py-3 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors"
             >
               Save as Draft
             </button>
@@ -812,7 +812,7 @@ export default function NewEmployeePage() {
               {currentStep > 1 && (
                 <button
                   onClick={handlePrevious}
-                  className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                  className="px-6 py-3 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors"
                 >
                   Previous
                 </button>
@@ -821,7 +821,7 @@ export default function NewEmployeePage() {
               {currentStep < totalSteps ? (
                 <button
                   onClick={handleNext}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                  className="px-6 py-3 bg-accent-600 text-white rounded-lg font-medium hover:bg-accent-700 transition-colors"
                 >
                   Next
                 </button>
@@ -829,7 +829,7 @@ export default function NewEmployeePage() {
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-3 bg-accent-600 text-white rounded-lg font-medium hover:bg-accent-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Submitting...' : 'Complete Onboarding'}
                 </button>

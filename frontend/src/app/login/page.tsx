@@ -39,33 +39,76 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md">
-        {/* Logo and Brand */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-3">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-          </div>
-          <h1 className="text-xl font-semibold text-gray-900">
-            Cadenza<span className="text-blue-600">HR</span>
+    <div className="min-h-screen flex">
+      {/* Left Panel - Brand */}
+      <div className="hidden lg:flex lg:w-[480px] bg-slate-900 flex-col justify-between p-12">
+        <div>
+          <h1 className="text-2xl font-semibold text-white tracking-tight">
+            Cadenza<span className="text-accent-500">HR</span>
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Human Resources Platform</p>
+          <p className="text-slate-500 text-sm mt-1">Human Resources Platform</p>
         </div>
 
-        {/* Sign In Form */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-          <div className="mb-6">
-            <h2 className="text-2xl font-semibold text-gray-900 text-center">Sign In</h2>
-            <p className="text-sm text-gray-600 text-center mt-2">Welcome back to CadenzaHR</p>
+        <div>
+          <div className="space-y-6">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-slate-200">Employee Management</h3>
+                <p className="text-sm text-slate-500 mt-0.5">Manage your workforce lifecycle from onboarding to offboarding</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-slate-200">Payroll Processing</h3>
+                <p className="text-sm text-slate-500 mt-0.5">Automated payroll calculations with statutory compliance</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-slate-200">Reports & Analytics</h3>
+                <p className="text-sm text-slate-500 mt-0.5">Data-driven insights for informed decision making</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-xs text-slate-600">Cadenza Consulting</p>
+      </div>
+
+      {/* Right Panel - Form */}
+      <div className="flex-1 flex items-center justify-center bg-white p-8">
+        <div className="w-full max-w-sm">
+          {/* Mobile brand */}
+          <div className="lg:hidden mb-8">
+            <h1 className="text-xl font-semibold text-slate-900 tracking-tight">
+              Cadenza<span className="text-accent-600">HR</span>
+            </h1>
+          </div>
+
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-slate-900">Sign in to your account</h2>
+            <p className="text-sm text-slate-500 mt-1">Enter your credentials to continue</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
-                Email
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">
+                Email address
               </label>
               <input
                 id="email"
@@ -75,14 +118,12 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                placeholder=""
+                className="input-field"
               />
             </div>
 
-            {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5">
                 Password
               </label>
               <input
@@ -93,35 +134,30 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                placeholder=""
+                className="input-field"
               />
               <div className="text-right mt-2">
-                <a href="#" className="text-sm text-blue-600 hover:text-blue-700 transition-colors">
-                  Forgot Password?
+                <a href="#" className="text-sm text-accent-600 hover:text-accent-700 transition-colors">
+                  Forgot password?
                 </a>
               </div>
             </div>
 
-            {/* Sign In Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary w-full py-2.5"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-white"></div>
+                  Signing in...
+                </span>
+              ) : (
+                'Sign in'
+              )}
             </button>
           </form>
-
-          {/* Sign Up Link */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Not a Member yet?{' '}
-              <a href="#" className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
-                Sign Up
-              </a>
-            </p>
-          </div>
         </div>
       </div>
     </div>

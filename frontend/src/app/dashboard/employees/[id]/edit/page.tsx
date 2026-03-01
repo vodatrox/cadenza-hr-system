@@ -213,7 +213,7 @@ export default function EditEmployeePage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-slate-300 border-t-accent-600"></div>
         </div>
       </DashboardLayout>
     );
@@ -226,27 +226,27 @@ export default function EditEmployeePage() {
         <div className="mb-6">
           <button
             onClick={() => router.push(`/dashboard/employees/${params.id}`)}
-            className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+            className="flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900 mb-4 transition-colors"
           >
             <FiArrowLeft />
             Back to Employee Details
           </button>
-          <h1 className="text-2xl font-semibold text-gray-900">Edit Employee</h1>
-          <p className="text-sm text-gray-500 mt-1">Update employee information</p>
+          <h1 className="text-2xl font-semibold text-slate-900">Edit Employee</h1>
+          <p className="text-sm text-slate-500 mt-1">Update employee information</p>
         </div>
 
         {/* Progress Steps */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <div className="bg-white rounded-lg border border-slate-200 p-6 mb-6">
           <div className="flex items-center justify-between">
             {[1, 2, 3, 4, 5].map((step) => (
               <div key={step} className="flex items-center">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
                     step < currentStep
-                      ? 'bg-green-100 text-green-700'
+                      ? 'bg-emerald-100 text-emerald-700'
                       : step === currentStep
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-400'
+                      ? 'bg-accent-600 text-white'
+                      : 'bg-slate-100 text-slate-400'
                   }`}
                 >
                   {step < currentStep ? '✓' : step}
@@ -254,7 +254,7 @@ export default function EditEmployeePage() {
                 {step < 5 && (
                   <div
                     className={`w-16 h-0.5 mx-2 ${
-                      step < currentStep ? 'bg-green-500' : 'bg-gray-200'
+                      step < currentStep ? 'bg-emerald-500' : 'bg-slate-200'
                     }`}
                   />
                 )}
@@ -262,25 +262,25 @@ export default function EditEmployeePage() {
             ))}
           </div>
           <div className="flex justify-between mt-2">
-            <span className="text-xs text-gray-500">Personal</span>
-            <span className="text-xs text-gray-500">Job</span>
-            <span className="text-xs text-gray-500">Payment</span>
-            <span className="text-xs text-gray-500">Emergency</span>
-            <span className="text-xs text-gray-500">Tax & Docs</span>
+            <span className="text-xs text-slate-500">Personal</span>
+            <span className="text-xs text-slate-500">Job</span>
+            <span className="text-xs text-slate-500">Payment</span>
+            <span className="text-xs text-slate-500">Emergency</span>
+            <span className="text-xs text-slate-500">Tax & Docs</span>
           </div>
         </div>
 
         {/* Form Content */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-white rounded-lg border border-slate-200 p-6">
           {/* Step 1: Personal Details */}
           {currentStep === 1 && (
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Personal Details</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">Personal Details</h2>
 
               {/* Photo Upload */}
               <div className="mb-6 flex justify-center">
                 <div className="relative">
-                  <div className="w-32 h-32 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 overflow-hidden flex items-center justify-center">
+                  <div className="w-32 h-32 rounded-full bg-slate-100 border-2 border-dashed border-slate-300 overflow-hidden flex items-center justify-center">
                     {existingPhotoUrl ? (
                       <img
                         src={existingPhotoUrl}
@@ -288,10 +288,10 @@ export default function EditEmployeePage() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <FiUpload className="text-3xl text-gray-400" />
+                      <FiUpload className="text-3xl text-slate-400" />
                     )}
                   </div>
-                  <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition-colors">
+                  <label className="absolute bottom-0 right-0 bg-accent-600 text-white p-2 rounded-full cursor-pointer hover:bg-accent-700 transition-colors">
                     <FiUpload />
                     <input
                       type="file"
@@ -305,7 +305,7 @@ export default function EditEmployeePage() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     First Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -313,22 +313,22 @@ export default function EditEmployeePage() {
                     name="first_name"
                     value={formData.first_name}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Middle Name</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Middle Name</label>
                   <input
                     type="text"
                     name="middle_name"
                     value={formData.middle_name}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Last Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -336,7 +336,7 @@ export default function EditEmployeePage() {
                     name="last_name"
                     value={formData.last_name}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                     required
                   />
                 </div>
@@ -344,7 +344,7 @@ export default function EditEmployeePage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -352,12 +352,12 @@ export default function EditEmployeePage() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Phone <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -365,7 +365,7 @@ export default function EditEmployeePage() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                     required
                   />
                 </div>
@@ -373,7 +373,7 @@ export default function EditEmployeePage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Date of Birth <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -381,17 +381,17 @@ export default function EditEmployeePage() {
                     name="date_of_birth"
                     value={formData.date_of_birth}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Gender</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Gender</label>
                   <select
                     name="gender"
                     value={formData.gender}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   >
                     <option value="MALE">Male</option>
                     <option value="FEMALE">Female</option>
@@ -401,45 +401,45 @@ export default function EditEmployeePage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Address</label>
+                <label className="block text-xs font-medium text-slate-700 mb-1">Address</label>
                 <input
                   type="text"
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-field"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">City</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">City</label>
                   <input
                     type="text"
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">State</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">State</label>
                   <input
                     type="text"
                     name="state"
                     value={formData.state}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Country</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Country</label>
                   <input
                     type="text"
                     name="country"
                     value={formData.country}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
               </div>
@@ -449,11 +449,11 @@ export default function EditEmployeePage() {
           {/* Step 2: Job Details */}
           {currentStep === 2 && (
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Job Details</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">Job Details</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Employee ID <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -461,12 +461,12 @@ export default function EditEmployeePage() {
                     name="employee_id"
                     value={formData.employee_id}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Position <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -474,7 +474,7 @@ export default function EditEmployeePage() {
                     name="position"
                     value={formData.position}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                     required
                   />
                 </div>
@@ -482,14 +482,14 @@ export default function EditEmployeePage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Department <span className="text-red-500">*</span>
                   </label>
                   <select
                     name="department"
                     value={formData.department}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                     required
                   >
                     <option value="">Select Department</option>
@@ -501,7 +501,7 @@ export default function EditEmployeePage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Date Hired <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -509,7 +509,7 @@ export default function EditEmployeePage() {
                     name="date_hired"
                     value={formData.date_hired}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                     required
                   />
                 </div>
@@ -517,12 +517,12 @@ export default function EditEmployeePage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Employment Type</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Employment Type</label>
                   <select
                     name="employment_type"
                     value={formData.employment_type}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   >
                     <option value="FULL_TIME">Full-Time</option>
                     <option value="PART_TIME">Part-Time</option>
@@ -531,12 +531,12 @@ export default function EditEmployeePage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Status</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Status</label>
                   <select
                     name="status"
                     value={formData.status}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   >
                     <option value="ACTIVE">Active</option>
                     <option value="PROBATION">Probation</option>
@@ -551,10 +551,10 @@ export default function EditEmployeePage() {
           {/* Step 3: Payment Information */}
           {currentStep === 3 && (
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Information</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">Payment Information</h2>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-xs font-medium text-slate-700 mb-1">
                   Basic Salary <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -562,64 +562,64 @@ export default function EditEmployeePage() {
                   name="basic_salary"
                   value={formData.basic_salary}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-field"
                   required
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Bank Name</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Bank Name</label>
                   <input
                     type="text"
                     name="bank_name"
                     value={formData.bank_name}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Account Number</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Account Number</label>
                   <input
                     type="text"
                     name="account_number"
                     value={formData.account_number}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Account Name</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Account Name</label>
                   <input
                     type="text"
                     name="account_name"
                     value={formData.account_name}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Routing Code</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Routing Code</label>
                   <input
                     type="text"
                     name="routing_code"
                     value={formData.routing_code}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Account Type</label>
+                <label className="block text-xs font-medium text-slate-700 mb-1">Account Type</label>
                 <select
                   name="account_type"
                   value={formData.account_type}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-field"
                 >
                   <option value="SAVINGS">Savings</option>
                   <option value="CURRENT">Current</option>
@@ -631,39 +631,39 @@ export default function EditEmployeePage() {
           {/* Step 4: Emergency Contacts */}
           {currentStep === 4 && (
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Emergency Contact</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">Emergency Contact</h2>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Contact Name</label>
+                <label className="block text-xs font-medium text-slate-700 mb-1">Contact Name</label>
                 <input
                   type="text"
                   name="emergency_contact_name"
                   value={formData.emergency_contact_name}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-field"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Contact Phone</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Contact Phone</label>
                   <input
                     type="tel"
                     name="emergency_contact_phone"
                     value={formData.emergency_contact_phone}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Relationship</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Relationship</label>
                   <input
                     type="text"
                     name="emergency_contact_relationship"
                     value={formData.emergency_contact_relationship}
                     onChange={handleInputChange}
                     placeholder="e.g., Spouse, Parent, Sibling"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
               </div>
@@ -673,54 +673,54 @@ export default function EditEmployeePage() {
           {/* Step 5: Tax & Documents */}
           {currentStep === 5 && (
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Tax & Documents</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">Tax & Documents</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Tax ID</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Tax ID</label>
                   <input
                     type="text"
                     name="tax_id"
                     value={formData.tax_id}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Pension Number</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Pension Number</label>
                   <input
                     type="text"
                     name="pension_number"
                     value={formData.pension_number}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Resume</label>
+                <label className="block text-xs font-medium text-slate-700 mb-1">Resume</label>
                 <input
                   type="file"
                   accept=".pdf,.doc,.docx"
                   onChange={(e) => handleFileChange(e, 'resume')}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-field"
                 />
                 {documents.resume && (
-                  <p className="text-xs text-gray-500 mt-1">Selected: {documents.resume.name}</p>
+                  <p className="text-xs text-slate-500 mt-1">Selected: {documents.resume.name}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Contract</label>
+                <label className="block text-xs font-medium text-slate-700 mb-1">Contract</label>
                 <input
                   type="file"
                   accept=".pdf,.doc,.docx"
                   onChange={(e) => handleFileChange(e, 'contract')}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-field"
                 />
                 {documents.contract && (
-                  <p className="text-xs text-gray-500 mt-1">Selected: {documents.contract.name}</p>
+                  <p className="text-xs text-slate-500 mt-1">Selected: {documents.contract.name}</p>
                 )}
               </div>
             </div>
@@ -733,8 +733,8 @@ export default function EditEmployeePage() {
               disabled={currentStep === 1}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                 currentStep === 1
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
               Previous
@@ -743,14 +743,14 @@ export default function EditEmployeePage() {
             <div className="flex gap-3">
               <button
                 onClick={() => router.push(`/dashboard/employees/${params.id}`)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
               >
                 Cancel
               </button>
               {currentStep < totalSteps ? (
                 <button
                   onClick={handleNext}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-white bg-accent-600 rounded-lg hover:bg-accent-700 transition-colors"
                 >
                   Next
                 </button>
@@ -758,7 +758,7 @@ export default function EditEmployeePage() {
                 <button
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 text-sm font-medium text-white bg-accent-600 rounded-lg hover:bg-accent-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {submitting ? 'Updating...' : 'Update Employee'}
                 </button>

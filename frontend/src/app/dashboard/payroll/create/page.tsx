@@ -179,7 +179,7 @@ export default function CreatePayrollPage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-slate-300 border-t-accent-600"></div>
         </div>
       </DashboardLayout>
     );
@@ -191,21 +191,21 @@ export default function CreatePayrollPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Create Payroll</h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <h1 className="text-xl font-semibold text-slate-900">Create Payroll</h1>
+            <p className="text-sm text-slate-500 mt-1">
               Generate payroll for your employees in a few simple steps
             </p>
           </div>
           <button
             onClick={() => router.push('/dashboard/payroll')}
-            className="text-gray-600 hover:text-gray-900"
+            className="text-slate-600 hover:text-slate-900"
           >
             <FiX className="text-2xl" />
           </button>
         </div>
 
         {/* Progress Steps */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-white rounded-lg border border-slate-200 p-6">
           <div className="flex items-center justify-between">
             {steps.map((step, index) => {
               const Icon = step.icon;
@@ -216,22 +216,22 @@ export default function CreatePayrollPage() {
                 <div key={step.number} className="flex items-center flex-1">
                   <div className="flex flex-col items-center flex-1">
                     <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
                         isCompleted
-                          ? 'bg-green-600 text-white'
+                          ? 'bg-accent-600 text-white'
                           : isActive
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-200 text-gray-600'
+                          ? 'bg-slate-900 text-white'
+                          : 'bg-slate-200 text-slate-600'
                       }`}
                     >
                       {isCompleted ? <FiCheck className="text-xl" /> : <Icon className="text-xl" />}
                     </div>
-                    <p className={`text-sm font-medium mt-2 ${isActive ? 'text-blue-600' : 'text-gray-600'}`}>
+                    <p className={`text-sm font-medium mt-2 ${isActive ? 'text-slate-900' : 'text-slate-600'}`}>
                       {step.title}
                     </p>
                   </div>
                   {index < steps.length - 1 && (
-                    <div className={`h-0.5 flex-1 mx-4 ${isCompleted ? 'bg-green-600' : 'bg-gray-200'}`} />
+                    <div className={`h-0.5 flex-1 mx-4 ${isCompleted ? 'bg-accent-600' : 'bg-slate-200'}`} />
                   )}
                 </div>
               );
@@ -240,22 +240,22 @@ export default function CreatePayrollPage() {
         </div>
 
         {/* Step Content */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-white rounded-lg border border-slate-200 p-6">
           {/* Step 1: Select Period */}
           {currentStep === 1 && (
             <div className="space-y-4">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-1">Select Payroll Period</h2>
-                <p className="text-sm text-gray-500">Choose the period for which you want to create payroll</p>
+                <h2 className="text-sm font-semibold text-slate-900 mb-1">Select Payroll Period</h2>
+                <p className="text-sm text-slate-500">Choose the period for which you want to create payroll</p>
               </div>
 
               {periods.length === 0 ? (
-                <div className="text-center py-12 bg-gray-50 rounded-lg">
-                  <FiCalendar className="text-4xl text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500 text-sm mb-4">No draft payroll periods available</p>
+                <div className="text-center py-12 bg-slate-50 rounded-lg">
+                  <FiCalendar className="text-4xl text-slate-300 mx-auto mb-3" />
+                  <p className="text-slate-500 text-sm mb-4">No draft payroll periods available</p>
                   <button
                     onClick={() => router.push('/dashboard/payroll/periods')}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                    className="btn-primary inline-flex items-center gap-2"
                   >
                     Create Period
                   </button>
@@ -268,14 +268,14 @@ export default function CreatePayrollPage() {
                       onClick={() => setSelectedPeriod(period)}
                       className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                         selectedPeriod?.id === period.id
-                          ? 'border-blue-600 bg-blue-50'
-                          : 'border-gray-200 hover:border-blue-300'
+                          ? 'border-accent-600 bg-slate-50'
+                          : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900">{period.title}</h3>
-                          <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                          <h3 className="font-semibold text-slate-900">{period.title}</h3>
+                          <div className="flex items-center gap-4 mt-2 text-sm text-slate-600">
                             <span>{formatDate(period.start_date)} - {formatDate(period.end_date)}</span>
                             <span>•</span>
                             <span>Payment: {formatDate(period.payment_date)}</span>
@@ -288,7 +288,7 @@ export default function CreatePayrollPage() {
                           </div>
                         </div>
                         {selectedPeriod?.id === period.id && (
-                          <FiCheck className="text-2xl text-blue-600" />
+                          <FiCheck className="text-2xl text-accent-600" />
                         )}
                       </div>
                     </div>
@@ -299,7 +299,7 @@ export default function CreatePayrollPage() {
               {/* Batch Title Input */}
               {selectedPeriod && (
                 <div className="mt-6">
-                  <label htmlFor="batch-title" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="batch-title" className="block text-sm font-medium text-slate-700 mb-2">
                     Batch Title (Optional)
                   </label>
                   <input
@@ -308,10 +308,10 @@ export default function CreatePayrollPage() {
                     value={batchTitle}
                     onChange={(e) => setBatchTitle(e.target.value)}
                     placeholder={`${selectedPeriod.title} - Batch`}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="input-field"
                   />
-                  <p className="mt-1 text-xs text-gray-500">
-                    Leave empty to auto-generate: "{selectedPeriod.title} - Batch"
+                  <p className="mt-1 text-xs text-slate-500">
+                    Leave empty to auto-generate: &quot;{selectedPeriod.title} - Batch&quot;
                   </p>
                 </div>
               )}
@@ -323,10 +323,10 @@ export default function CreatePayrollPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900 mb-1">Select Employees</h2>
-                  <p className="text-sm text-gray-500">Choose which employees to include in this payroll run</p>
+                  <h2 className="text-sm font-semibold text-slate-900 mb-1">Select Employees</h2>
+                  <p className="text-sm text-slate-500">Choose which employees to include in this payroll run</p>
                 </div>
-                <div className="text-sm font-medium text-gray-900">
+                <div className="text-sm font-medium text-slate-900">
                   {selectedEmployees.length} of {filteredEmployees.length} selected
                 </div>
               </div>
@@ -334,50 +334,50 @@ export default function CreatePayrollPage() {
               {/* Search and Select All */}
               <div className="flex items-center gap-3">
                 <div className="flex-1 relative">
-                  <FiSearch className="absolute left-3 top-3 text-gray-400" />
+                  <FiSearch className="absolute left-3 top-3 text-slate-400" />
                   <input
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search by name, ID, or department..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field pl-10"
                   />
                 </div>
                 <button
                   onClick={toggleSelectAll}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+                  className="btn-secondary"
                 >
                   {selectedEmployees.length === filteredEmployees.length ? 'Deselect All' : 'Select All'}
                 </button>
               </div>
 
               {/* Employee List */}
-              <div className="max-h-[400px] overflow-y-auto border border-gray-200 rounded-lg">
+              <div className="max-h-[400px] overflow-y-auto border border-slate-200 rounded-lg">
                 {filteredEmployees.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500 text-sm">
+                  <div className="text-center py-8 text-slate-500 text-sm">
                     No employees found
                   </div>
                 ) : (
-                  <div className="divide-y divide-gray-200">
+                  <div className="divide-y divide-slate-200">
                     {filteredEmployees.map((employee) => (
                       <div
                         key={employee.id}
                         onClick={() => toggleEmployeeSelection(employee.id)}
-                        className="p-4 hover:bg-gray-50 cursor-pointer transition-colors"
+                        className="p-4 hover:bg-slate-50 cursor-pointer transition-colors"
                       >
                         <div className="flex items-center gap-3">
                           <input
                             type="checkbox"
                             checked={selectedEmployees.includes(employee.id)}
                             onChange={() => {}}
-                            className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            className="w-4 h-4 text-accent-600 border-slate-300 rounded focus:ring-accent-500"
                           />
                           <div className="flex-1">
                             <div className="flex items-center gap-3">
-                              <h4 className="font-medium text-gray-900">{employee.full_name}</h4>
-                              <span className="text-sm text-gray-500">#{employee.employee_id}</span>
+                              <h4 className="font-medium text-slate-900">{employee.full_name}</h4>
+                              <span className="text-sm text-slate-500">#{employee.employee_id}</span>
                             </div>
-                            <div className="flex items-center gap-4 mt-1 text-sm text-gray-600">
+                            <div className="flex items-center gap-4 mt-1 text-sm text-slate-600">
                               <span>{employee.department_name}</span>
                               <span>•</span>
                               <span>{employee.position}</span>
@@ -398,54 +398,54 @@ export default function CreatePayrollPage() {
           {currentStep === 3 && selectedPeriod && (
             <div className="space-y-4">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-1">Review Selection</h2>
-                <p className="text-sm text-gray-500">Review the payroll details before creating</p>
+                <h2 className="text-sm font-semibold text-slate-900 mb-1">Review Selection</h2>
+                <p className="text-sm text-slate-500">Review the payroll details before creating</p>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-3">Payroll Period</h3>
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                <h3 className="text-sm font-semibold text-slate-900 mb-3">Payroll Period</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Period:</span>
-                    <span className="font-medium text-gray-900">{selectedPeriod.title}</span>
+                    <span className="text-slate-600">Period:</span>
+                    <span className="font-medium text-slate-900">{selectedPeriod.title}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Duration:</span>
-                    <span className="font-medium text-gray-900">
+                    <span className="text-slate-600">Duration:</span>
+                    <span className="font-medium text-slate-900">
                       {formatDate(selectedPeriod.start_date)} - {formatDate(selectedPeriod.end_date)}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Payment Date:</span>
-                    <span className="font-medium text-gray-900">{formatDate(selectedPeriod.payment_date)}</span>
+                    <span className="text-slate-600">Payment Date:</span>
+                    <span className="font-medium text-slate-900">{formatDate(selectedPeriod.payment_date)}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-3">Selected Employees ({selectedEmployees.length})</h3>
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                <h3 className="text-sm font-semibold text-slate-900 mb-3">Selected Employees ({selectedEmployees.length})</h3>
                 <div className="max-h-[300px] overflow-y-auto space-y-2">
                   {employees
                     .filter(e => selectedEmployees.includes(e.id))
                     .map((employee) => (
                       <div key={employee.id} className="flex items-center justify-between text-sm bg-white p-3 rounded-lg">
                         <div>
-                          <p className="font-medium text-gray-900">{employee.full_name}</p>
-                          <p className="text-gray-600">{employee.department_name} - {employee.position}</p>
+                          <p className="font-medium text-slate-900">{employee.full_name}</p>
+                          <p className="text-slate-600">{employee.department_name} - {employee.position}</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-medium text-gray-900">₦{parseFloat(employee.basic_salary).toLocaleString()}</p>
-                          <p className="text-xs text-gray-500">Basic Salary</p>
+                          <p className="font-medium text-slate-900">₦{parseFloat(employee.basic_salary).toLocaleString()}</p>
+                          <p className="text-xs text-slate-500">Basic Salary</p>
                         </div>
                       </div>
                     ))}
                 </div>
               </div>
 
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
                 <div className="flex items-start gap-3">
-                  <FiFileText className="text-yellow-600 text-xl mt-0.5" />
-                  <div className="text-sm text-gray-700">
+                  <FiFileText className="text-slate-600 text-xl mt-0.5" />
+                  <div className="text-sm text-slate-700">
                     <p className="font-medium mb-1">What happens next?</p>
                     <ul className="list-disc list-inside space-y-1">
                       <li>Individual payroll records will be created for each selected employee</li>
@@ -461,25 +461,25 @@ export default function CreatePayrollPage() {
           {/* Step 4: Confirm */}
           {currentStep === 4 && (
             <div className="space-y-6 text-center py-8">
-              <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                <FiCheck className="text-4xl text-blue-600" />
+              <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto">
+                <FiCheck className="text-4xl text-accent-600" />
               </div>
               <div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-2">Ready to Create Payroll</h2>
-                <p className="text-gray-600">
+                <h2 className="text-xl font-semibold text-slate-900 mb-2">Ready to Create Payroll</h2>
+                <p className="text-slate-600">
                   You are about to create {selectedEmployees.length} payroll record{selectedEmployees.length !== 1 ? 's' : ''} for {selectedPeriod?.title}
                 </p>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-6 max-w-md mx-auto">
+              <div className="bg-slate-50 rounded-lg p-6 max-w-md mx-auto">
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Total Employees:</span>
-                    <span className="font-semibold text-gray-900">{selectedEmployees.length}</span>
+                    <span className="text-slate-600">Total Employees:</span>
+                    <span className="font-semibold text-slate-900">{selectedEmployees.length}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Estimated Total Salary:</span>
-                    <span className="font-semibold text-gray-900">
+                    <span className="text-slate-600">Estimated Total Salary:</span>
+                    <span className="font-semibold text-slate-900">
                       ₦{employees
                         .filter(e => selectedEmployees.includes(e.id))
                         .reduce((sum, e) => sum + parseFloat(e.basic_salary), 0)
@@ -489,18 +489,18 @@ export default function CreatePayrollPage() {
                 </div>
               </div>
 
-              <p className="text-sm text-gray-500 max-w-lg mx-auto">
+              <p className="text-sm text-slate-500 max-w-lg mx-auto">
                 Click the button below to create the payroll records. This action will create draft payroll entries that you can review and modify before final approval.
               </p>
             </div>
           )}
 
           {/* Navigation Buttons */}
-          <div className="flex items-center justify-between pt-6 border-t border-gray-200 mt-6">
+          <div className="flex items-center justify-between pt-6 border-t border-slate-200 mt-6">
             <button
               onClick={handleBack}
               disabled={currentStep === 1}
-              className="inline-flex items-center gap-2 px-6 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-secondary inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FiChevronLeft className="text-base" />
               Back
@@ -509,7 +509,7 @@ export default function CreatePayrollPage() {
             {currentStep < 4 ? (
               <button
                 onClick={handleNext}
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                className="btn-primary inline-flex items-center gap-2"
               >
                 Next
                 <FiChevronRight className="text-base" />
@@ -518,11 +518,11 @@ export default function CreatePayrollPage() {
               <button
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-slate-300 border-t-accent-600"></div>
                     Creating...
                   </>
                 ) : (

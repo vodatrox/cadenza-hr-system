@@ -87,21 +87,32 @@ function BatchDetailContent() {
   };
 
   const getStatusBadge = (status: string) => {
-    const colors: Record<string, string> = {
-      DRAFT: 'bg-gray-100 text-gray-800',
-      APPROVED: 'bg-blue-100 text-blue-800',
-      PAID: 'bg-green-100 text-green-800',
-      PENDING: 'bg-yellow-100 text-yellow-800',
-      CANCELLED: 'bg-red-100 text-red-800'
+    const styles: Record<string, string> = {
+      DRAFT: 'bg-slate-100 text-slate-600',
+      APPROVED: 'bg-blue-50 text-blue-700',
+      PAID: 'bg-emerald-50 text-emerald-700',
+      PENDING: 'bg-amber-50 text-amber-700',
+      CANCELLED: 'bg-red-50 text-red-700'
     };
-    return colors[status] || 'bg-gray-100 text-gray-800';
+    return styles[status] || 'bg-slate-100 text-slate-600';
+  };
+
+  const getStatusDot = (status: string) => {
+    const dots: Record<string, string> = {
+      DRAFT: 'bg-slate-400',
+      APPROVED: 'bg-blue-500',
+      PAID: 'bg-emerald-500',
+      PENDING: 'bg-amber-500',
+      CANCELLED: 'bg-red-500'
+    };
+    return dots[status] || 'bg-slate-400';
   };
 
   if (loading) {
     return (
       <DashboardLayout>
         <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-2 border-slate-300 border-t-accent-600"></div>
         </div>
       </DashboardLayout>
     );
@@ -118,7 +129,7 @@ function BatchDetailContent() {
         <div className="mb-6">
           <button
             onClick={() => router.push('/dashboard/payroll/batches')}
-            className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
+            className="flex items-center text-slate-600 hover:text-slate-900 mb-4"
           >
             <FiArrowLeft className="mr-2" />
             Back to Batches
@@ -126,10 +137,11 @@ function BatchDetailContent() {
 
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{batch.title}</h1>
-              <p className="text-gray-600 mt-1">{batch.batch_number}</p>
+              <h1 className="text-xl font-semibold text-slate-900">{batch.title}</h1>
+              <p className="text-slate-600 mt-1">{batch.batch_number}</p>
             </div>
-            <span className={`px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full ${getStatusBadge(batch.status)}`}>
+            <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${getStatusBadge(batch.status)}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${getStatusDot(batch.status)}`}></span>
               {batch.status}
             </span>
           </div>
@@ -137,38 +149,38 @@ function BatchDetailContent() {
 
         {/* Batch Summary */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <p className="text-sm text-gray-600 mb-1">Total Employees</p>
-            <p className="text-2xl font-bold text-gray-900">{batch.payroll_count}</p>
+          <div className="bg-white rounded-lg border border-slate-200 p-6">
+            <p className="text-sm text-slate-600 mb-1">Total Employees</p>
+            <p className="text-2xl font-bold text-slate-900">{batch.payroll_count}</p>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <p className="text-sm text-gray-600 mb-1">Total Gross Pay</p>
-            <p className="text-2xl font-bold text-gray-900">
+          <div className="bg-white rounded-lg border border-slate-200 p-6">
+            <p className="text-sm text-slate-600 mb-1">Total Gross Pay</p>
+            <p className="text-2xl font-bold text-slate-900">
               ₦{parseFloat(batch.total_gross_pay).toLocaleString()}
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <p className="text-sm text-gray-600 mb-1">Total Deductions</p>
-            <p className="text-2xl font-bold text-gray-900">
+          <div className="bg-white rounded-lg border border-slate-200 p-6">
+            <p className="text-sm text-slate-600 mb-1">Total Deductions</p>
+            <p className="text-2xl font-bold text-slate-900">
               ₦{parseFloat(batch.total_deductions).toLocaleString()}
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <p className="text-sm text-gray-600 mb-1">Total Net Pay</p>
-            <p className="text-2xl font-bold text-green-600">
+          <div className="bg-white rounded-lg border border-slate-200 p-6">
+            <p className="text-sm text-slate-600 mb-1">Total Net Pay</p>
+            <p className="text-2xl font-bold text-emerald-600">
               ₦{parseFloat(batch.total_net_pay).toLocaleString()}
             </p>
           </div>
         </div>
 
         {/* Batch Actions */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Batch Actions</h2>
+        <div className="bg-white rounded-lg border border-slate-200 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">Batch Actions</h2>
           <div className="flex flex-wrap gap-3">
             {batch.status === 'DRAFT' && (
               <button
                 onClick={() => handleBatchAction('approve')}
-                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                className="btn-primary flex items-center px-4 py-2 rounded-lg"
               >
                 <FiCheck className="mr-2" />
                 Approve Batch
@@ -178,7 +190,7 @@ function BatchDetailContent() {
             {batch.status === 'APPROVED' && (
               <button
                 onClick={() => handleBatchAction('mark_paid')}
-                className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                className="btn-primary flex items-center px-4 py-2 rounded-lg"
               >
                 <FiDollarSign className="mr-2" />
                 Mark as Paid
@@ -187,7 +199,7 @@ function BatchDetailContent() {
 
             <button
               onClick={() => handleBatchAction('recalculate')}
-              className="flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+              className="btn-secondary flex items-center px-4 py-2 rounded-lg"
             >
               <FiRefreshCw className="mr-2" />
               Recalculate All
@@ -195,7 +207,7 @@ function BatchDetailContent() {
 
             <button
               onClick={() => handleExport('excel')}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="btn-secondary flex items-center px-4 py-2 rounded-lg"
             >
               <FiDownload className="mr-2" />
               Export to Excel
@@ -203,7 +215,7 @@ function BatchDetailContent() {
 
             <button
               onClick={() => handleExport('pdf')}
-              className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+              className="btn-secondary flex items-center px-4 py-2 rounded-lg"
             >
               <FiDownload className="mr-2" />
               Export to PDF
@@ -211,71 +223,72 @@ function BatchDetailContent() {
           </div>
 
           {batch.description && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600">Description</p>
-              <p className="text-gray-900 mt-1">{batch.description}</p>
+            <div className="mt-4 p-4 bg-slate-50 rounded-lg">
+              <p className="text-sm text-slate-600">Description</p>
+              <p className="text-slate-900 mt-1">{batch.description}</p>
             </div>
           )}
         </div>
 
         {/* Payrolls List */}
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Payrolls ({payrolls.length})</h2>
+        <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-200">
+            <h2 className="text-lg font-semibold text-slate-900">Payrolls ({payrolls.length})</h2>
           </div>
 
           {payrolls.length === 0 ? (
             <div className="p-12 text-center">
-              <p className="text-gray-500">No payrolls in this batch</p>
+              <p className="text-slate-500">No payrolls in this batch</p>
             </div>
           ) : (
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <table className="min-w-full divide-y divide-slate-100">
+              <thead>
+                <tr className="border-b border-slate-100">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Employee
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Employee ID
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Gross Pay
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Deductions
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Net Pay
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-slate-100">
                 {payrolls.map((payroll) => (
-                  <tr key={payroll.id} className="hover:bg-gray-50">
+                  <tr key={payroll.id} className="hover:bg-slate-50/50">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{payroll.employee_name}</div>
+                      <div className="text-sm font-medium text-slate-900">{payroll.employee_name}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{payroll.employee_id_number}</div>
+                      <div className="text-sm text-slate-900">{payroll.employee_id_number}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadge(payroll.status)}`}>
+                      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${getStatusBadge(payroll.status)}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${getStatusDot(payroll.status)}`}></span>
                         {payroll.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
                       ₦{parseFloat(payroll.gross_pay).toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
                       ₦{parseFloat(payroll.total_deductions).toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-600">
                       ₦{parseFloat(payroll.net_pay).toLocaleString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

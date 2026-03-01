@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import api from '@/lib/api';
 import { toast } from 'react-toastify';
-import { FiArrowLeft, FiDownload, FiPrinter, FiMail } from 'react-icons/fi';
+import { FiArrowLeft, FiDownload, FiPrinter } from 'react-icons/fi';
 import type { Payroll } from '@/types';
 
 export default function PayslipPage() {
@@ -19,16 +19,8 @@ export default function PayslipPage() {
 
   useEffect(() => {
     if (!_hasHydrated) return;
-
-    if (!isAuthenticated()) {
-      router.push('/login');
-      return;
-    }
-    if (!currentClient) {
-      router.push('/clients');
-      return;
-    }
-
+    if (!isAuthenticated()) { router.push('/login'); return; }
+    if (!currentClient) { router.push('/clients'); return; }
     fetchPayroll();
   }, [_hasHydrated, isAuthenticated, currentClient, payrollId]);
 
@@ -45,239 +37,160 @@ export default function PayslipPage() {
     }
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = () => window.print();
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+  const fmt = (val: string) => parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  const formatDate = (dateString: string) =>
+    new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-slate-300 border-t-accent-600"></div>
       </div>
     );
   }
 
   if (!payroll) return null;
 
+  // Collect all earnings into a flat list
+  const earningLines: { label: string; amount: string }[] = [
+    { label: 'Basic Salary', amount: payroll.basic_salary },
+  ];
+  if (parseFloat(payroll.total_allowances) > 0)
+    earningLines.push({ label: 'Allowances', amount: payroll.total_allowances });
+  if (payroll.statutory_earnings_breakdown?.length) {
+    payroll.statutory_earnings_breakdown.forEach(e => earningLines.push({ label: e.name, amount: e.amount }));
+  } else if (parseFloat(payroll.total_statutory_earnings) > 0) {
+    earningLines.push({ label: 'Statutory Earnings', amount: payroll.total_statutory_earnings });
+  }
+  payroll.earnings?.forEach(e => earningLines.push({ label: e.name, amount: e.amount }));
+
+  // Collect all deductions
+  const deductionLines: { label: string; amount: string }[] = [];
+  if (parseFloat(payroll.pension) > 0) deductionLines.push({ label: 'Pension', amount: payroll.pension });
+  if (parseFloat(payroll.nhf) > 0) deductionLines.push({ label: 'NHF', amount: payroll.nhf });
+  if (parseFloat(payroll.tax) > 0) deductionLines.push({ label: 'Income Tax (PAYE)', amount: payroll.tax });
+  if (payroll.statutory_deductions_breakdown?.length) {
+    payroll.statutory_deductions_breakdown.forEach(d => deductionLines.push({ label: d.name, amount: d.amount }));
+  } else if (parseFloat(payroll.total_statutory_deductions) > 0) {
+    deductionLines.push({ label: 'Other Statutory', amount: payroll.total_statutory_deductions });
+  }
+  payroll.deductions?.forEach(d => deductionLines.push({ label: d.name, amount: d.amount }));
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Action Bar - Hidden on print */}
-      <div className="print:hidden bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => router.push(`/dashboard/payroll/${payrollId}`)}
-              className="inline-flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <FiArrowLeft />
-              Back to Payroll
+    <div className="min-h-screen bg-slate-50">
+      {/* Action Bar */}
+      <div className="print:hidden bg-white border-b border-slate-200 sticky top-0 z-10">
+        <div className="max-w-[800px] mx-auto px-6 h-14 flex items-center justify-between">
+          <button
+            onClick={() => router.push(`/dashboard/payroll/${payrollId}`)}
+            className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900 transition-colors"
+          >
+            <FiArrowLeft className="w-4 h-4" />
+            Back to Payroll
+          </button>
+          <div className="flex items-center gap-2">
+            <button onClick={handlePrint} className="btn-secondary text-sm">
+              <FiPrinter className="w-4 h-4" />
+              Print
             </button>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handlePrint}
-                className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <FiPrinter />
-                Print
-              </button>
-              <button
-                onClick={handlePrint}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                <FiDownload />
-                Download PDF
-              </button>
-            </div>
+            <button onClick={handlePrint} className="btn-primary text-sm">
+              <FiDownload className="w-4 h-4" />
+              Download PDF
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Payslip Content */}
-      <div className="max-w-5xl mx-auto p-6">
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden print:shadow-none">
-          {/* Header */}
-          <div className="bg-blue-600 text-white p-8">
-            <div className="flex items-center justify-between">
+      {/* Payslip Document */}
+      <div className="max-w-[800px] mx-auto py-8 px-6 print:py-0 print:px-0">
+        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden print:shadow-none print:border-0 print:rounded-none">
+
+          {/* Document Header */}
+          <div className="px-10 pt-10 pb-8 print:px-8 print:pt-6">
+            <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-3xl font-bold mb-2">{currentClient?.name}</h1>
-                <p className="text-blue-100">{currentClient?.address}</p>
-                <p className="text-blue-100">{currentClient?.email} | {currentClient?.phone}</p>
+                <div className="flex items-center gap-3 mb-1">
+                  <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center print:bg-slate-800">
+                    <span className="text-white font-bold text-sm">{currentClient?.name?.charAt(0) || 'C'}</span>
+                  </div>
+                  <div>
+                    <h1 className="text-lg font-semibold text-slate-900">{currentClient?.name}</h1>
+                    <p className="text-xs text-slate-500">{currentClient?.email}</p>
+                  </div>
+                </div>
               </div>
               <div className="text-right">
-                <p className="text-4xl font-bold">PAYSLIP</p>
-                <p className="text-blue-100 mt-2">{payroll.period_name}</p>
+                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1">Payslip</p>
+                <p className="text-sm font-semibold text-slate-900">{payroll.period_name}</p>
+                {payroll.payment_date && (
+                  <p className="text-xs text-slate-500 mt-0.5">Paid {formatDate(payroll.payment_date)}</p>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Employee Information */}
-          <div className="p-8 border-b border-gray-200">
+          {/* Employee Info Strip */}
+          <div className="mx-10 print:mx-8 rounded-lg bg-slate-50 px-6 py-4 mb-8 print:bg-slate-50">
+            <div className="grid grid-cols-3 gap-6">
+              <div>
+                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-1">Employee</p>
+                <p className="text-sm font-semibold text-slate-900">{payroll.employee_name}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-1">Employee ID</p>
+                <p className="text-sm font-semibold text-slate-900">#{payroll.employee_id_number}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-1">Period</p>
+                <p className="text-sm font-semibold text-slate-900">{payroll.period_name}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Earnings & Deductions — Side by Side */}
+          <div className="px-10 print:px-8 pb-8">
             <div className="grid grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-3">EMPLOYEE DETAILS</h3>
-                <div className="space-y-2">
-                  <div>
-                    <p className="text-sm text-gray-600">Name</p>
-                    <p className="font-semibold text-gray-900">{payroll.employee_name}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Employee ID</p>
-                    <p className="font-semibold text-gray-900">#{payroll.employee_id_number}</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-3">PAY PERIOD</h3>
-                <div className="space-y-2">
-                  <div>
-                    <p className="text-sm text-gray-600">Period</p>
-                    <p className="font-semibold text-gray-900">{payroll.period_name}</p>
-                  </div>
-                  {payroll.payment_date && (
-                    <div>
-                      <p className="text-sm text-gray-600">Payment Date</p>
-                      <p className="font-semibold text-gray-900">{formatDate(payroll.payment_date)}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Earnings & Deductions */}
-          <div className="p-8">
-            <div className="grid grid-cols-2 gap-12">
               {/* Earnings */}
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-blue-600">
-                  EARNINGS
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-700">Basic Salary</span>
-                    <span className="font-medium text-gray-900">
-                      ₦{parseFloat(payroll.basic_salary).toLocaleString()}
-                    </span>
-                  </div>
-
-                  {parseFloat(payroll.total_allowances) > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-700">Allowances</span>
-                      <span className="font-medium text-gray-900">
-                        ₦{parseFloat(payroll.total_allowances).toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-
-                  {payroll.statutory_earnings_breakdown && payroll.statutory_earnings_breakdown.length > 0 ? (
-                    payroll.statutory_earnings_breakdown.map((earning) => (
-                      <div key={earning.id} className="flex justify-between">
-                        <span className="text-gray-700">{earning.name}</span>
-                        <span className="font-medium text-gray-900">
-                          ₦{parseFloat(earning.amount).toLocaleString()}
-                        </span>
-                      </div>
-                    ))
-                  ) : parseFloat(payroll.total_statutory_earnings) > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-700">Statutory Earnings</span>
-                      <span className="font-medium text-gray-900">
-                        ₦{parseFloat(payroll.total_statutory_earnings).toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-
-                  {payroll.earnings && payroll.earnings.map((earning) => (
-                    <div key={earning.id} className="flex justify-between">
-                      <span className="text-gray-700">{earning.name}</span>
-                      <span className="font-medium text-gray-900">
-                        ₦{parseFloat(earning.amount).toLocaleString()}
-                      </span>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                  <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Earnings</h3>
+                </div>
+                <div className="space-y-0">
+                  {earningLines.map((line, i) => (
+                    <div key={i} className="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-0">
+                      <span className="text-sm text-slate-600">{line.label}</span>
+                      <span className="text-sm font-medium text-slate-900 tabular-nums">₦{fmt(line.amount)}</span>
                     </div>
                   ))}
-
-                  <div className="pt-3 mt-3 border-t-2 border-gray-300 flex justify-between font-bold text-lg">
-                    <span className="text-gray-900">Gross Pay</span>
-                    <span className="text-blue-600">
-                      ₦{parseFloat(payroll.gross_pay).toLocaleString()}
-                    </span>
+                  <div className="flex items-center justify-between pt-3 mt-1 border-t-2 border-slate-200">
+                    <span className="text-sm font-semibold text-slate-900">Gross Pay</span>
+                    <span className="text-sm font-bold text-emerald-700 tabular-nums">₦{fmt(payroll.gross_pay)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Deductions */}
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-red-600">
-                  DEDUCTIONS
-                </h3>
-                <div className="space-y-3">
-                  {parseFloat(payroll.pension) > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-700">Pension</span>
-                      <span className="font-medium text-gray-900">
-                        ₦{parseFloat(payroll.pension).toLocaleString()}
-                      </span>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                  <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Deductions</h3>
+                </div>
+                <div className="space-y-0">
+                  {deductionLines.length > 0 ? deductionLines.map((line, i) => (
+                    <div key={i} className="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-0">
+                      <span className="text-sm text-slate-600">{line.label}</span>
+                      <span className="text-sm font-medium text-slate-900 tabular-nums">₦{fmt(line.amount)}</span>
                     </div>
+                  )) : (
+                    <div className="py-2.5 text-sm text-slate-400">No deductions</div>
                   )}
-
-                  {parseFloat(payroll.nhf) > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-700">NHF</span>
-                      <span className="font-medium text-gray-900">
-                        ₦{parseFloat(payroll.nhf).toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-
-                  {parseFloat(payroll.tax) > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-700">Income Tax</span>
-                      <span className="font-medium text-gray-900">
-                        ₦{parseFloat(payroll.tax).toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-
-                  {payroll.statutory_deductions_breakdown && payroll.statutory_deductions_breakdown.length > 0 ? (
-                    payroll.statutory_deductions_breakdown.map((deduction) => (
-                      <div key={deduction.id} className="flex justify-between">
-                        <span className="text-gray-700">{deduction.name}</span>
-                        <span className="font-medium text-gray-900">
-                          ₦{parseFloat(deduction.amount).toLocaleString()}
-                        </span>
-                      </div>
-                    ))
-                  ) : parseFloat(payroll.total_statutory_deductions) > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-700">Other Statutory</span>
-                      <span className="font-medium text-gray-900">
-                        ₦{parseFloat(payroll.total_statutory_deductions).toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-
-                  {payroll.deductions && payroll.deductions.map((deduction) => (
-                    <div key={deduction.id} className="flex justify-between">
-                      <span className="text-gray-700">{deduction.name}</span>
-                      <span className="font-medium text-gray-900">
-                        ₦{parseFloat(deduction.amount).toLocaleString()}
-                      </span>
-                    </div>
-                  ))}
-
-                  <div className="pt-3 mt-3 border-t-2 border-gray-300 flex justify-between font-bold text-lg">
-                    <span className="text-gray-900">Total Deductions</span>
-                    <span className="text-red-600">
-                      ₦{parseFloat(payroll.total_deductions).toLocaleString()}
-                    </span>
+                  <div className="flex items-center justify-between pt-3 mt-1 border-t-2 border-slate-200">
+                    <span className="text-sm font-semibold text-slate-900">Total Deductions</span>
+                    <span className="text-sm font-bold text-red-600 tabular-nums">₦{fmt(payroll.total_deductions)}</span>
                   </div>
                 </div>
               </div>
@@ -285,53 +198,44 @@ export default function PayslipPage() {
           </div>
 
           {/* Net Pay */}
-          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-t-2 border-emerald-200 p-8 print:border-t print:border-gray-300 print:bg-white">
+          <div className="mx-10 print:mx-8 mb-10 rounded-xl bg-slate-900 px-8 py-7 text-white">
             <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-emerald-900 uppercase tracking-wide mb-3 print:text-gray-700">Take Home Pay</p>
-                <div className="flex items-baseline gap-3">
-                  <span className="text-5xl font-bold text-gray-900 tracking-tight">
-                    ₦{parseFloat(payroll.net_pay).toLocaleString()}
-                  </span>
-                  <span className="text-lg text-gray-500 font-medium">.00</span>
-                </div>
-                <p className="text-sm text-gray-600 mt-3">Net amount after all deductions</p>
+              <div>
+                <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">Net Pay</p>
+                <p className="text-3xl font-bold tracking-tight tabular-nums">
+                  ₦{fmt(payroll.net_pay)}
+                </p>
               </div>
-              <div className="hidden md:flex print:hidden items-center justify-center w-28 h-28 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/20">
-                <div className="text-center text-white">
-                  <div className="text-3xl font-bold">₦</div>
-                  <div className="text-xs font-medium mt-1 opacity-90">NGN</div>
-                </div>
+              <div className="text-right hidden sm:block print:block">
+                <p className="text-xs text-slate-400 mb-1">Breakdown</p>
+                <p className="text-sm text-slate-300 tabular-nums">
+                  ₦{fmt(payroll.gross_pay)} gross
+                  <span className="mx-1.5 text-slate-600">-</span>
+                  ₦{fmt(payroll.total_deductions)} deductions
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Footer Note */}
-          <div className="p-8 bg-gray-50 border-t border-gray-200">
-            <p className="text-sm text-gray-600 text-center">
-              This is a computer-generated payslip and does not require a signature.
-            </p>
-            <p className="text-xs text-gray-500 text-center mt-2">
-              For any queries regarding this payslip, please contact the HR department.
-            </p>
+          {/* Footer */}
+          <div className="px-10 print:px-8 py-6 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-between">
+              <p className="text-[11px] text-slate-400">
+                This is a computer-generated payslip and does not require a signature.
+              </p>
+              <p className="text-[11px] text-slate-400">
+                {currentClient?.name}
+              </p>
+            </div>
           </div>
-        </div>
-
-        {/* Print Instructions */}
-        <div className="print:hidden mt-6 text-center text-sm text-gray-500">
-          <p>Click the Print button above to save this payslip as a PDF or print a physical copy.</p>
         </div>
       </div>
 
       {/* Print Styles */}
       <style jsx global>{`
         @media print {
-          body {
-            background: white !important;
-          }
-          @page {
-            margin: 0.5cm;
-          }
+          body { background: white !important; }
+          @page { margin: 1cm; }
         }
       `}</style>
     </div>

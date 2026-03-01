@@ -6,7 +6,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+});
 
 export default function RootLayout({
   children,
@@ -14,7 +18,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   useEffect(() => {
-    // Global error handler
     const handleError = (event: ErrorEvent) => {
       console.error('[Global Error Handler] Uncaught error:', {
         message: event.message,
@@ -35,8 +38,6 @@ export default function RootLayout({
 
     window.addEventListener('error', handleError);
     window.addEventListener('unhandledrejection', handleUnhandledRejection);
-
-    console.log('[RootLayout] Global error handlers registered');
 
     return () => {
       window.removeEventListener('error', handleError);
