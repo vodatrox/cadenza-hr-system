@@ -3,10 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   images: {
-    domains: ['localhost', '127.0.0.1'],
-  },
-  env: {
-    API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
+    remotePatterns: [
+      { protocol: 'http', hostname: 'localhost' },
+      { protocol: 'http', hostname: '127.0.0.1' },
+      { protocol: 'https', hostname: '*.railway.app' },
+    ],
   },
 }
 

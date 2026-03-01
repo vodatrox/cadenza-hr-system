@@ -17,6 +17,9 @@ RUN pip install --upgrade pip && \
 
 COPY . /app
 
+# Collect static files at build time
+RUN python manage.py collectstatic --noinput 2>/dev/null || true
+
 EXPOSE 8000
 
-CMD ["gunicorn", "cadenza_hr.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+CMD ["sh", "start.sh"]
