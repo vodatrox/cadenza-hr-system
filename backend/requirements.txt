@@ -17,5 +17,5 @@ social-auth-app-django
 whitenoise
 openpyxl
 reportlab
-weasyprint
+
 dj-database-url

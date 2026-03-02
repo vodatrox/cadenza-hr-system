@@ -1,8 +1,15 @@
 #!/bin/sh
-set -e
+
+echo "Waiting for database..."
+# Give the database a moment to be reachable
+sleep 3
 
 echo "Running migrations..."
-python manage.py migrate --noinput
+python manage.py migrate --noinput || {
+    echo "Migration failed, retrying in 5s..."
+    sleep 5
+    python manage.py migrate --noinput
+}
 
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
